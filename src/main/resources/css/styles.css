@@ -1,0 +1,19 @@
+.tab-button {
+    -fx-background-color: transparent;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.tab-button:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+/* Style cho nút đang được chọn */
+.tab-button.active {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+    -fx-border-color: #007bff;
+}

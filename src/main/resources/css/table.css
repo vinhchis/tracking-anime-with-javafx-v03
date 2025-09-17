@@ -1,0 +1,34 @@
+#acc-table {
+  -fx-font-size: 20px;
+  -fx-table-cell-border-color: transparent;
+  -fx-selection-bar: #647FBC;        /* selected row background */
+  -fx-selection-bar-text: white;    /* selected row text color */
+}
+
+/* header background and label */
+#acc-table .column-header-background {
+  -fx-background-color: linear-gradient(#f0f3fb, #dfe9ff);
+}
+#acc-table .table-column .label {
+  -fx-font-weight: bold;
+  -fx-text-fill: #263656;
+  -fx-alignment: CENTER;
+}
+
+#acc-table .table-cell {
+  -fx-alignment: CENTER; /* or TOP_LEFT, BOTTOM_RIGHT, etc. */
+}
+
+/* optional: alternate row colors (CSS fallback) */
+#acc-table .table-row-cell:odd {
+  -fx-background-color: #f4f6ff;
+}
+#acc-table .table-row-cell:even {
+  -fx-background-color: white;
+}
+
+#acc-table .button {
+  -fx-background-color: #ff4d4d;
+  -fx-text-fill: white;
+  -fx-font-size: 14px;
+}

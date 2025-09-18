@@ -15,10 +15,10 @@ import javafx.scene.Parent;
 import javafx.scene.image.Image;
 
 public class AssetUtils {
-    private static final String BASE = "/com/project/view";
+    private static final String BASE = "/com/project";
 
      public static Parent loadFXML(String name) {
-        String fxmlPath = BASE + name;
+        String fxmlPath = BASE + "/view" + name;
         try {
             URL url = Main.class.getResource(fxmlPath);
             if (url == null) throw new IllegalArgumentException("FXML not found: " + fxmlPath);

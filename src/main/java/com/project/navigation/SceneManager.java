@@ -26,10 +26,10 @@ public class SceneManager{
             Object controller;
             if(sceneCache.containsKey(view)){
                 System.out.println("Loading " + view + " from cache...");
+
                 root = sceneCache.get(view);
                 controller = controllerCache.get(view);
             }else{
-                System.out.println("Loading " + view + " from FXML...");
                 String fxmlPath = basePath + view.getFxmlFile();
                 System.out.println("Loading " + fxmlPath + " from FXML...");
 
@@ -46,7 +46,6 @@ public class SceneManager{
             }
 
             stage.getScene().setRoot(root);
-
             if(controller instanceof Refreshable){
                 ((Refreshable) controller).onFresh();
             }
@@ -58,7 +57,3 @@ public class SceneManager{
         }
     }
 }
-/*
- * Controllers must implement SceneManaged interface to get SceneManager
- *
- */

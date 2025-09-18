@@ -21,15 +21,18 @@ public class Main extends Application {
 
         // ---------------- //
         primaryStage = stage;
-        primaryStage.setScene(new Scene(new VBox()));
         primaryStage.setTitle("Tracking Anime Application");
+        primaryStage.setWidth(1200);
+        primaryStage.setHeight(800);
+        primaryStage.setResizable(false);
+        primaryStage.setScene(new Scene(new VBox()));
 
         // inject Stage to SceneManager
         // SceneManager sceneManager = new SceneManager(primaryStage); // not change
         // sceneManager.switchTo(View.USER_DASHBOARD);
         Parent root = AssetUtils.loadFXML("/DashboardView.fxml");
-        primaryStage.getScene().setRoot(root);
 
+        primaryStage.getScene().setRoot(root);
         primaryStage.show();
     }
 

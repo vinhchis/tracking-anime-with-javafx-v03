@@ -16,7 +16,7 @@ public class Anime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "anime_id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "api_id", length = 20, unique = true, nullable = true)
     private String apiId; // Jikan API ID

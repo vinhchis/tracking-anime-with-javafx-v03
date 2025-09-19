@@ -23,6 +23,10 @@ public class TrackingService {
     public void saveTracking(Tracking tracking) {
         trackingRepository.save(tracking);
     }
+    public void saveAll(List<TrackingDto> trackingDtos) {
+        List<Tracking> trackings = trackingDtos.stream().map(dto -> dtoToMapper(dto)).toList();
+        trackingRepository.saveAll(trackings);
+    }
 
     public void deleteTracking(Tracking tracking) {
         // delete anime ?
@@ -37,9 +41,9 @@ public class TrackingService {
         TrackingDto dto = new TrackingDto();
         // tracking
         dto.setTrackingId(tracking.getId());
-        dto.setTrackingStatus(tracking.getTrackingStatus().toString());
+        dto.setTrackingStatus(tracking.getTrackingStatus());
         dto.setLastWatchedEpisode(tracking.getLastWatchedEpisode());
-        dto.setScheduleDay(tracking.getScheduleDay().toString());
+        dto.setScheduleDay(tracking.getScheduleDay());
         dto.setScheduleLocalTime(tracking.getScheduleTime());
         dto.setRating(tracking.getRating());
         dto.setNote(tracking.getNote());
@@ -49,8 +53,8 @@ public class TrackingService {
             dto.setAnimeId(tracking.getAnime().getId());
             dto.setApiId(tracking.getAnime().getApiId());
             dto.setAnimeTitle(tracking.getAnime().getTitle());
-            dto.setAnimeStatus(tracking.getAnime().getAnimeStatus().toString());
-            dto.setAnimeType(tracking.getAnime().getAnimeType().toString());
+            dto.setAnimeStatus(tracking.getAnime().getAnimeStatus());
+            dto.setAnimeType(tracking.getAnime().getAnimeType());
             dto.setImageUrl(tracking.getAnime().getPosterUrl());
             dto.setTotalEpisodes(tracking.getAnime().getTotalEpisodes());
              // studio
@@ -67,6 +71,16 @@ public class TrackingService {
         return dto;
     }
 
-
+    private Tracking dtoToMapper(TrackingDto dto) {
+        Tracking tracking = trackingRepository.findById((long) dto.getTrackingId()).orElseThrow(() -> new IllegalArgumentException("Tracking not found"));
+            // update fields
+            tracking.setTrackingStatus(dto.getTrackingStatus());
+            tracking.setLastWatchedEpisode(dto.getLastWatchedEpisode());
+            tracking.setScheduleDay(dto.getScheduleDay());
+            tracking.setScheduleTime(dto.getScheduleLocalTime());
+            tracking.setRating(dto.getRating());
+            tracking.setNote(dto.getNote());
+            return tracking;
+    }
 
 }

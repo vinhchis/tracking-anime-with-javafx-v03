@@ -2,15 +2,14 @@ package com.project.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.Flow;
 
-import com.browniebytes.javafx.control.DateTimePicker;
-import com.browniebytes.javafx.control.HoursPicker;
-import com.jfoenix.controls.JFXTimePicker;
-import com.project.shared.TimePicker;
+import com.project.dto.TrackingDto;
 import com.project.shared.TrackingCard;
-import com.project.util.AssetUtil;
+import com.project.util.SaveRegistry;
+import com.project.util.Saveable;
+import com.project.viewmodel.MyListViewModel;
 
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -18,7 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 
-public class MyListController implements Initializable {
+public class MyListController implements Initializable, Saveable {
     @FXML
     private BorderPane myListBorderPane;
 
@@ -31,25 +30,83 @@ public class MyListController implements Initializable {
     @FXML
     private FlowPane trackingFlowPane;
 
+    private MyListViewModel viewModel;
+
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        filterStatusComboBox.getItems().addAll("All", "Watching", "Completed", "On Hold", "Dropped", "Plan to Watch");
-        filterStatusComboBox.setValue("All");
+        viewModel = new MyListViewModel();
+        SaveRegistry.register(this);
 
+        filterStatusComboBox.getItems().addAll("All", "Watching", "Completed", "On Hold", "Dropped", "Plan to Watch");
+
+        // default View
+        filterStatusComboBox.setValue("All");
+        refreshList();
+
+        // binding
+        filterStatusComboBox.valueProperty().bindBidirectional(viewModel.filterStatusProperty());
+        totalAnimeLabel.textProperty().bind(Bindings.size(viewModel.getFilteredList()).asString());
+
+        // event
         filterStatusComboBox.setOnAction(event -> {
-            String selectedStatus = filterStatusComboBox.getValue();
-            // Implement filtering logic based on selectedStatus
-            System.out.println("Selected Status: " + selectedStatus);
-            totalAnimeLabel.setText("Total Anime: " + (int)(Math.random() * 100)); // Placeholder for total count
+            refreshList();
         });
 
-        // FLOW PANE SETUP
+    }
 
-        for (int i = 1; i <= 5; i++) {
-            // TrackingCard card = new TrackingCard();
-            // card.applyModel("Anime" + i, "Haha", "Watching", AssetUtils.getImageFromProject("a1.png"), i, i);
-            DateTimePicker dtp = new DateTimePicker();
-            trackingFlowPane.getChildren().add(dtp);
+    private void refreshList() {
+        trackingFlowPane.getChildren().clear();
+        viewModel.getFilteredList().forEach(tracking -> {
+            trackingFlowPane.getChildren().add(createCard(tracking));
+        });
+    }
+
+    private TrackingCard createCard(TrackingDto dto) {
+        TrackingCard card = new TrackingCard();
+        card.setData(dto);
+
+        card.getDeleteButton().setOnAction(e -> {
+            viewModel.deleteTrackingById(dto.getTrackingId());
+            trackingFlowPane.getChildren().remove(card);
+        });
+
+        card.getTrackingStatusComboBox().setOnAction(e -> {
+            viewModel.updateTrackingCardInfo(card);
+            refreshList();
+        });
+
+        card.getScheduleDayComboBox().setOnAction(e -> {
+            viewModel.updateTrackingCardInfo(card);
+        });
+
+        card.getNoteTextArea().focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) { // focus lost
+                viewModel.updateTrackingCardInfo(card);
+            }
+        });
+
+        card.getRating().ratingProperty().addListener((obs, oldVal, newVal) -> {
+            viewModel.updateTrackingCardInfo(card);
+        });
+
+        card.getIncreaseBtn().setOnAction(e -> {
+            card.increaseEpisode();
+            viewModel.updateTrackingCardInfo(card);
+        });
+
+        card.getDecreaseBtn().setOnAction(e -> {
+            card.decreaseEpisode();
+            viewModel.updateTrackingCardInfo(card);
+        });
+
+
+        return card;
+    }
+
+    @Override
+    public void save() {
+        if (viewModel != null) {
+            viewModel.save();
         }
     }
 

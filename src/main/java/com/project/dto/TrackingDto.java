@@ -2,6 +2,11 @@ package com.project.dto;
 
 import java.time.LocalTime;
 
+import com.project.entity.Anime.ANIME_STATUS;
+import com.project.entity.Anime.ANIME_TYPE;
+import com.project.entity.Tracking.DAY_OF_WEEK;
+import com.project.entity.Tracking.TRACKINGS_STATUS;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,29 +18,29 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TrackingDto {
     // from tracking
-    private int trackingId;
-    private String trackingStatus;
-    private short lastWatchedEpisode;
-    private String scheduleDay;
+    private Long trackingId;
+    private TRACKINGS_STATUS trackingStatus;
+    private Short lastWatchedEpisode;
+    private DAY_OF_WEEK scheduleDay;
     private LocalTime scheduleLocalTime;
-    private byte rating;
+    private Byte rating;
     private String note;
 
     // from anime
-    private int animeId;
+    private Long animeId;
     private String apiId;
     private String animeTitle;
-    private String animeStatus;
-    private String animeType;
+    private ANIME_STATUS animeStatus;
+    private ANIME_TYPE animeType;
     private String imageUrl;
-    private short totalEpisodes;
+    private Short totalEpisodes;
 
     // from studio
     private String studioName;
 
     // from season
     private String seasonName;
-    private short seasonYear;
+    private Short seasonYear;
 
 
 }

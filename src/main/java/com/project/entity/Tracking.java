@@ -15,7 +15,7 @@ public class Tracking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tracking_id")
-    private Integer id;
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tracking_status", length = 15)

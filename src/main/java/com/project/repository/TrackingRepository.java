@@ -5,7 +5,6 @@ import java.util.List;
 import com.project.entity.Tracking;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 
 public class TrackingRepository extends JpaRepository<Tracking, Long> {
     public TrackingRepository() {

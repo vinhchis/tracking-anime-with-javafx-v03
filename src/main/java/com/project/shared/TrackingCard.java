@@ -6,7 +6,11 @@ import java.util.ResourceBundle;
 
 import org.controlsfx.control.Rating;
 
+import com.project.dto.TrackingDto;
+import com.project.entity.Tracking;
+import com.project.entity.Tracking.DAY_OF_WEEK;
 import com.project.entity.Tracking.TRACKINGS_STATUS;
+import com.project.util.AssetUtil;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,26 +37,24 @@ public class TrackingCard extends VBox implements Initializable {
     private Label animeStatusLabel;
     @FXML
     private Label totalEpisodesLabel;
-
+    // season
     @FXML
     private Label seasonNameLabel; // season year + name
     @FXML
     private Label seasonYearLabel;
-
+    // studio
     @FXML
     private Label studioLabel;
 
     // tracking info
     @FXML
-    private Label currentEpisodeLabel;
-    @FXML
     private Rating rating;
     @FXML
     private ComboBox<TRACKINGS_STATUS> trackingStatusComboBox;
     @FXML
-    private ComboBox<String> scheduleDayComboBox;
+    private ComboBox<DAY_OF_WEEK> scheduleDayComboBox;
     @FXML
-    private TimePicker scheduleTimePicker;
+    private Label scheduleTimeLabel; // change later to time picker
     @FXML
     private TextArea noteTextArea;
 
@@ -70,6 +72,8 @@ public class TrackingCard extends VBox implements Initializable {
     @FXML
     private Button decreaseBtn;
 
+    private TrackingDto dto;
+
     public TrackingCard() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/project/shared/TrackingCard.fxml"));
         loader.setRoot(this);
@@ -84,9 +88,124 @@ public class TrackingCard extends VBox implements Initializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        scheduleTimePicker.timeProperty().addListener((obs, oldVal, newVal) -> {
-            System.out.println("Chọn giờ: " + newVal);
+        trackingStatusComboBox.getItems().setAll(TRACKINGS_STATUS.values());
+        scheduleDayComboBox.getItems().setAll(Tracking.DAY_OF_WEEK.values());
+
+        trackingStatusComboBox.setValue(TRACKINGS_STATUS.WATCHING);
+
+        noteToggleButton.setOnAction(e -> {
+            noteTextArea.setVisible(noteToggleButton.isSelected());
         });
+
+    }
+
+    public void setData(TrackingDto trackingDto) {
+        this.dto = trackingDto;
+
+        // Set tracking info
+        rating.setRating(dto.getRating());
+        trackingStatusComboBox.setValue(dto.getTrackingStatus());
+        scheduleDayComboBox.setValue(dto.getScheduleDay());
+        if (dto.getScheduleLocalTime() != null) {
+            scheduleTimeLabel.setText(dto.getScheduleLocalTime().toString());
+        } else {
+            scheduleTimeLabel.setText("Not Set");
+        }
+        noteTextArea.setText(dto.getNote());
+
+        // Set progress
+        short totalEpisodes = dto.getTotalEpisodes() != null ? dto.getTotalEpisodes() : 0;
+        short lastWatched = dto.getLastWatchedEpisode() != null ? dto.getLastWatchedEpisode() : 0;
+
+        episodeProgressLabel.setText(lastWatched + " / " + totalEpisodes);
+        if (totalEpisodes > 0) {
+            progressBar.setProgress((double) lastWatched / totalEpisodes);
+        } else {
+            progressBar.setProgress(0);
+        }
+
+        // Set anime info
+        titleLabel.setText(dto.getAnimeTitle());
+        Image posterImage = AssetUtil.getImageFromProject(dto.getImageUrl());
+        posterImageView.setImage(posterImage);
+        animeTypeLabel.setText(dto.getAnimeType().toString());
+        animeStatusLabel.setText(dto.getAnimeStatus().toString());
+        totalEpisodesLabel.setText(String.valueOf(dto.getTotalEpisodes() != null ? dto.getTotalEpisodes() : "Unknown"));
+
+        // season
+        seasonNameLabel.setText(dto.getSeasonName() != null ? dto.getSeasonName() : "Unknown");
+        seasonYearLabel
+                .setText(String.valueOf(dto.getSeasonYear()) != null ? String.valueOf(dto.getSeasonYear()) : "Unknown");
+        // studio
+        studioLabel.setText(dto.getStudioName());
+    }
+
+    public void increaseEpisode() {
+        short lastWatched = dto.getLastWatchedEpisode() != null ? dto.getLastWatchedEpisode() : 0;
+        short totalEpisodes = dto.getTotalEpisodes() != null ? dto.getTotalEpisodes() : 0;
+        if (totalEpisodes == 0 || lastWatched < totalEpisodes) {
+            lastWatched++;
+            dto.setLastWatchedEpisode(lastWatched);
+            episodeProgressLabel.setText(lastWatched + " / " + (totalEpisodes == 0 ? "Unknown" : totalEpisodes));
+            if (totalEpisodes > 0) {
+                progressBar.setProgress((double) lastWatched / totalEpisodes);
+            } else {
+                progressBar.setProgress(0);
+            }
+        }
+    }
+
+    public void decreaseEpisode() {
+        short lastWatched = dto.getLastWatchedEpisode() != null ? dto.getLastWatchedEpisode() : 0;
+        if (lastWatched > 0) {
+            lastWatched--;
+            dto.setLastWatchedEpisode(lastWatched);
+            short totalEpisodes = dto.getTotalEpisodes() != null ? dto.getTotalEpisodes() : 0;
+            episodeProgressLabel.setText(lastWatched + " / " + (totalEpisodes == 0 ? "Unknown" : totalEpisodes));
+            if (totalEpisodes > 0) {
+                progressBar.setProgress((double) lastWatched / totalEpisodes);
+            } else {
+                progressBar.setProgress(0);
+            }
+        }
+    }
+
+    // Getters and Setters
+    public TrackingDto getData() {
+        // Update dto with current UI values
+        dto.setRating((byte) rating.getRating());
+        dto.setTrackingStatus(trackingStatusComboBox.getValue());
+        dto.setScheduleDay(scheduleDayComboBox.getValue());
+        dto.setNote(noteTextArea.getText());
+        return dto;
+    }
+
+    public Button getDeleteButton() {
+        return deleteButton;
+    }
+
+    public Button getIncreaseBtn() {
+        return increaseBtn;
+    }
+
+    public Button getDecreaseBtn() {
+        return decreaseBtn;
+    }
+
+    public ComboBox<TRACKINGS_STATUS> getTrackingStatusComboBox() {
+        return trackingStatusComboBox;
+    }
+
+    public ComboBox<DAY_OF_WEEK> getScheduleDayComboBox() {
+        return scheduleDayComboBox;
+    }
+
+    public TextArea getNoteTextArea() {
+        return noteTextArea;
+    }
+
+    public Rating getRating() {
+        return rating;
     }
 
 }

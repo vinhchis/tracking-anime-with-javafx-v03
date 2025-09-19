@@ -15,7 +15,7 @@ public class Studio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "studio_id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "studio_name", length = 100, nullable = false, unique = true)
     private String studioName;

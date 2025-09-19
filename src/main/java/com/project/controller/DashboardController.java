@@ -9,6 +9,7 @@ import com.project.navigation.View;
 import com.project.service.ApiService;
 import com.project.util.AlertUtil;
 import com.project.util.AssetUtil;
+import com.project.util.SaveRegistry;
 import com.project.viewmodel.DashboardViewModel;
 import com.project.entity.Anime;
 
@@ -66,9 +67,11 @@ public class DashboardController implements Initializable {
         switch (clickedButton.getId()) {
             case "overViewButton":
                 root = AssetUtil.loadFXML(View.OVERVIEW.getFxmlFile());
+                SaveRegistry.saveAll();
                 break;
             case "discoverButton":
                 root = AssetUtil.loadFXML(View.DISCOVER.getFxmlFile());
+                SaveRegistry.saveAll();
                 break;
             case "myListButton":
                 root = AssetUtil.loadFXML(View.MY_LIST.getFxmlFile());

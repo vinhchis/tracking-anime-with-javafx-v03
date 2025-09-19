@@ -4,6 +4,7 @@ import com.project.navigation.SceneManager;
 import com.project.navigation.View;
 import com.project.util.AssetUtil;
 import com.project.util.JpaUtil;
+import com.project.util.SaveRegistry;
 import com.project.util.SeedData;
 
 import javafx.application.Application;
@@ -23,8 +24,8 @@ public class Main extends Application {
         primaryStage = stage;
         primaryStage.setTitle("Tracking Anime Application");
         primaryStage.setWidth(1200);
-        primaryStage.setHeight(800);
-        primaryStage.setResizable(false);
+        primaryStage.setHeight(900);
+        primaryStage.setResizable(true);
         primaryStage.setScene(new Scene(new VBox()));
 
         // inject Stage to SceneManager
@@ -38,7 +39,9 @@ public class Main extends Application {
 
     @Override
     public void stop(){
+        SaveRegistry.saveAll();
         JpaUtil.shutdown();
+
     }
 
     public static void main(String[] args) {

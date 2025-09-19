@@ -16,7 +16,7 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id")
-    private Integer id;
+    private Long id;
 
     @Column(length = 50, nullable = false)
     private String title;

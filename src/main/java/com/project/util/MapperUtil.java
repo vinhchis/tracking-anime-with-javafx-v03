@@ -2,12 +2,11 @@ package com.project.util;
 
 import com.project.dto.JikanAnimeResponse.AnimeData;
 import com.project.entity.Anime;
-import com.project.entity.Tracking;
 
 public class MapperUtil {
     public static Anime mapToAnime(AnimeData dto) {
         Anime anime = new Anime();
-        anime.setApi_id(String.valueOf(dto.getMal_id()));
+        anime.setApiId(String.valueOf(dto.getMal_id()));
         anime.setTitle(dto.getTitle());
         anime.setPosterUrl(dto.getImages().getJpg().getImage_url());
         anime.setIntroduction(dto.getSynopsis());

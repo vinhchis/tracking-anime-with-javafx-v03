@@ -1,246 +1,133 @@
-// package com.project.util;
+package com.project.util;
 
-// import java.time.DayOfWeek;
-// import java.time.LocalDateTime;
-// import java.time.LocalTime;
-// import java.util.Arrays;
+import java.time.LocalTime;
+import java.util.Arrays;
 
-// import com.project.entity.Anime;
-// import com.project.entity.Episode;
-// import com.project.entity.Notification;
-// import com.project.entity.Season;
-// import com.project.entity.Studio;
-// import com.project.entity.Tracking;
-// import com.project.model.SeasonId;
-// import com.project.repository.AnimeRepository;
-// import com.project.repository.EpisodeRepository;
-// import com.project.repository.NotificationRepository;
-// import com.project.repository.SeasonRepository;
-// import com.project.repository.StudioRepository;
-// import com.project.repository.TrackingRepository;
+import com.project.entity.Anime;
+import com.project.entity.Notification;
+import com.project.entity.Season;
+import com.project.entity.Studio;
+import com.project.entity.Tracking;
+import com.project.entity.Season.SEASON_NAME;
+import com.project.entity.Tracking.TRACKINGS_STATUS;
+import com.project.repository.AnimeRepository;
+import com.project.repository.NotificationRepository;
+import com.project.repository.SeasonRepository;
+import com.project.repository.StudioRepository;
+import com.project.repository.TrackingRepository;
 
-// import jakarta.persistence.EntityManagerFactory;
 
-// public class SeedData {
-//     public static void seeds() {
-//     //     EntityManagerFactory emf = JpaUtil.getEntityManagerFactory();
-//     //     AccountRepository accountRepository = new AccountRepository(emf);
-//     //     SeasonRepository seasonRepository = new SeasonRepository(emf);
-//     //     StudioRepository studioRepository = new StudioRepository(emf);
-//     //     AnimeRepository animeRepository = new AnimeRepository(emf);
-//     //     EpisodeRepository episodeRepository = new EpisodeRepository(emf);
-//     //     NotificationRepository notificationRepository = new NotificationRepository(emf);
-//     //     TrackingRepository trackingRepository = new TrackingRepository(emf);
+public class SeedData {
+    public static void seeds() {
+        AnimeRepository animeRepo = new AnimeRepository();
+        StudioRepository studioRepo = new StudioRepository();
+        SeasonRepository seasonRepo = new SeasonRepository();
+        TrackingRepository trackingRepo = new TrackingRepository();
+        NotificationRepository notificationRepo = new NotificationRepository();
 
-//     //     if (accountRepository.count() > 0 || studioRepository.count() > 0 ||
-//     //             seasonRepository.count() > 0 || animeRepository.count() > 0 ||
-//     //             episodeRepository.count() > 0 || notificationRepository.count() > 0 ||
-//     //             trackingRepository.count() > 0) {
-//     //         System.out.println("-> Seeding skipped. Data already exists.");
-//     //         return;
-//     //     }
+        if (studioRepo.count() == 0) {
+            Studio studio1 = Studio.builder()
+                .studioName("Studio Ghibli")
+                .logoUrl("Studio Ghibli.jpg")
+                .bestAnimes("My Neighbor Totoro, Spirited Away, Princess Mononoke")
+                .build();
+            Studio studio2 = Studio.builder()
+                .studioName("Kyoto Animation")
+                .logoUrl("Kyoto Animation.jpg")
+                .bestAnimes("Clannad, Violet Evergarden, A Silent Voice")
+                .build();
+            Studio studio3 = Studio.builder()
+                .studioName("Madhouse")
+                .logoUrl("Madhouse.jpg")
+                .bestAnimes("Death Note, One Punch, Hunter x Hunter")
+                .build();
+            Studio studio4 = Studio.builder()
+                .studioName("Bones")
+                .logoUrl("Bones.jpg")
+                .bestAnimes("Fullmetal Alchemist, My Hero Academia, Mob Psycho 100")
+                .build();
+            Studio studio5 = Studio.builder()
+                .studioName("Ufotable")
+                .logoUrl("Ufotable.jpg")
+                .bestAnimes("Demon Slayer, Fate series, The Garden of Sinners")
+                .build();
 
-//     //     System.out.println("-> Seeding started...");
-//     //     seedAccounts(accountRepository);
-//     //     seedStudios(studioRepository);
-//     //     seedSeasons(seasonRepository);
-//     //     // with relation
-//     //     seedAnimes(animeRepository, studioRepository, seasonRepository);
-//     //     seedEpisodes(episodeRepository, animeRepository);
-//     //     seedTrackings(trackingRepository, accountRepository, animeRepository);
-//     //     seedNotifications(notificationRepository, accountRepository, animeRepository);
-//     //     System.out.println("-> Seeding completed.");
-//     // }
+            studioRepo.saveAll(Arrays.asList(studio1, studio2, studio3, studio4, studio5));
+        }
 
-//     // private static void seedSeasons(SeasonRepository seasonRepository) {
-//     //     System.out.println("-> Seeding Seasons Table...");
+        if (seasonRepo.count() == 0) {
+            Season season1 = Season.builder().seasonName(SEASON_NAME.FALL).seasonYear((short)2024).build();
+            Season season2 = Season.builder().seasonName(SEASON_NAME.SUMMER).seasonYear((short)2024).build();
+            Season season3 = Season.builder().seasonName(SEASON_NAME.SPRING).seasonYear((short)2024).build();
+            Season season4 = Season.builder().seasonName(SEASON_NAME.WINTER).seasonYear((short)2024).build();
 
-//     //     Season winter2023 = new Season();
-//     //     winter2023.setId(new SeasonId("WINTER", (short) 2023));
+            seasonRepo.saveAll(Arrays.asList(season1, season2, season3, season4));
+        }
 
-//     //     Season spring2023 = new Season();
-//     //     spring2023.setId(new SeasonId("SPRING", (short) 2023));
+        if(animeRepo.count() == 0) {
+            Studio studioGhibli = studioRepo.findBy("studioName", "Studio Ghibli").getFirst();
+            Studio studioMadhouse = studioRepo.findBy("studioName", "Madhouse").getFirst();
+            Season seasonFall2024 = seasonRepo.findBySeasonNameAndSeasonYear(SEASON_NAME.FALL, (short)2024).get();
+            Season seasonSummer2024 = seasonRepo.findBySeasonNameAndSeasonYear(SEASON_NAME.SUMMER, (short)2024).get();
 
-//     //     Season summer2023 = new Season();
-//     //     summer2023.setId(new SeasonId("SUMMER", (short) 2023));
+            Anime anime1 = Anime.builder()
+                    // .apiId("1")
+                    .title("My Neighbor Totoro")
+                    .posterUrl("My Neighbor Totoro.jpg")
+                    .introduction("My Neighbor Totoro is a heartwarming tale of two young sisters who move to the countryside and discover magical creatures in the nearby forest, including the gentle and iconic Totoro. Directed by Hayao Miyazaki, this beloved Studio Ghibli film explores themes of family, nature, and childhood wonder.")
+                    .animeType(Anime.ANIME_TYPE.MOVIE)
+                    .animeStatus(Anime.ANIME_STATUS.COMPLETED)
+                    .totalEpisodes((short)1)
+                    .studio(studioGhibli)
+                    .season(seasonFall2024)
+                    .build();
 
-//     //     Season fall2023 = new Season();
-//     //     fall2023.setId(new SeasonId("FALL", (short) 2023));
+            Anime anime2 = Anime.builder()
+                    // .apiId("2")
+                    .title("Death Note")
+                    .posterUrl("Death Note.jpg")
+                    .introduction("Death Note is a psychological thriller anime that follows Light Yagami, a high school student who discovers a mysterious notebook that allows him to kill anyone by writing their name in it. As Light takes on the persona of 'Kira' and aims to create a utopia free of crime, he is pursued by the brilliant detective L in a high-stakes game of cat and mouse.")
+                    .animeType(Anime.ANIME_TYPE.TV)
+                    .animeStatus(Anime.ANIME_STATUS.COMPLETED)
+                    .totalEpisodes((short)37)
+                    .studio(studioMadhouse)
+                    .season(seasonSummer2024)
+                    .build();
 
-//     //     Season winter2024 = new Season();
-//     //     winter2024.setId(new SeasonId("WINTER", (short) 2024));
+            animeRepo.saveAll(Arrays.asList(anime1, anime2));
+        }
 
-//     //     Season spring2024 = new Season();
-//     //     spring2024.setId(new SeasonId("SPRING", (short) 2024));
+        if (trackingRepo.count() == 0) {
+            Anime anime1 = animeRepo.findBy("title", "My Neighbor Totoro").getFirst();
+            Anime anime2 = animeRepo.findBy("title", "Death Note").getFirst();
 
-//     //     Season summer2024 = new Season();
-//     //     summer2024.setId(new SeasonId("SUMMER", (short) 2024));
+            Tracking tracking1 = Tracking.builder()
+                    .trackingStatus(TRACKINGS_STATUS.WATCHING)
+                    .lastWatchedEpisode((short)4)
+                    .scheduleDay(Tracking.DAY_OF_WEEK.SATURDAY)
+                    .scheduleTime(LocalTime.of(18, 30))
+                    .rating((byte)4)
+                    .note("watch on TV360, good quality")
+                    .anime(anime1)
+                    .build();
 
-//     //     Season fall2024 = new Season();
-//     //     fall2024.setId(new SeasonId("FALL", (short) 2024));
+            Tracking tracking2 = Tracking.builder()
+                    .trackingStatus(TRACKINGS_STATUS.PLAN_TO_WATCH)
+                    .lastWatchedEpisode((short)0)
+                    .scheduleDay(Tracking.DAY_OF_WEEK.SUNDAY)
+                    .scheduleTime(LocalTime.of(20, 0))
+                    .rating((byte)0)
+                    .note("wait for the dub version")
+                    .anime(anime2)
+                    .build();
 
-//     //     seasonRepository.saveAll(Arrays.asList(
-//     //             winter2023, spring2023, summer2023, fall2023,
-//     //             winter2024, spring2024, summer2024, fall2024));
-//     // }
+            trackingRepo.saveAll(Arrays.asList(tracking1, tracking2));
+        }
 
-//     // private static void seedStudios(StudioRepository studioRepository) {
-//     //     System.out.println("-> Seeding Studios Table...");
-//     //     Studio mappa = new Studio();
-//     //     mappa.setStudioName("MAPPA");
-//     //     mappa.setBestAnimes("Jujutsu K,Kimetsu no Yaiba, Chains");
+        // Seed Notifications - Todo
+        if (notificationRepo.count() == 0) {
 
-//     //     Studio ufotable = new Studio();
-//     //     ufotable.setStudioName("ufotable");
-//     //     ufotable.setBestAnimes("Fate Series, Demon Slayer, God Eater");
+        }
 
-//     //     studioRepository.saveAll(Arrays.asList(mappa, ufotable));
-//     // }
-
-//     // private static void seedAccounts(AccountRepository accountRepository) {
-//     //     System.out.println("-> Seeding Accounts Table...");
-//     //     Account admin01 = new Account();
-
-//     //     // admin01 - 123
-//     //     admin01.setUsername("admin01");
-//     //     admin01.setHashedPassword(HashUtil.encode("123"));
-//     //     admin01.setUserRole(Account.Role.ADMIN);
-
-//     //     // admin02 - 123
-//     //     Account admin02 = new Account();
-
-//     //     admin02.setUsername("admin02");
-//     //     admin02.setHashedPassword(HashUtil.encode("123"));
-//     //     admin02.setUserRole(Account.Role.ADMIN);
-
-//     //     accountRepository.saveAll(Arrays.asList(admin01, admin02));
-
-//     //     // user01 - 1234
-//     //     Account user01 = new Account();
-//     //     user01.setUsername("user01");
-//     //     user01.setHashedPassword(HashUtil.encode("1234"));
-//     //     user01.setUserRole(Account.Role.USER);
-
-//     //     // user02 - 1234
-//     //     Account user02 = new Account();
-//     //     user02.setUsername("user02");
-//     //     user02.setHashedPassword(HashUtil.encode("1234"));
-//     //     user02.setUserRole(Account.Role.USER);
-
-//     //     // user02 - 1234
-//     //     Account user03 = new Account();
-//     //     user03.setUsername("user03");
-//     //     user03.setHashedPassword(HashUtil.encode("1234"));
-//     //     user03.setUserRole(Account.Role.USER);
-
-//     //     accountRepository.saveAll(Arrays.asList(user01, user02, user03));
-//     // }
-
-//     // private static void seedAnimes(AnimeRepository animeRepo, StudioRepository studioRepo,
-//     //         SeasonRepository seasonRepo) {
-//     //     System.out.println("-> Seeding Animes Table...");
-
-//     //     Studio mappa = studioRepo.findBy("studioName", "MAPPA").getFirst();
-//     //     Season fall2024 = seasonRepo.findBy("id", new SeasonId("FALL", (short) 2024))
-//     //             .getFirst();
-
-//     //     // Jujutsu Kaisen
-//     //     Anime anime1 = new Anime();
-//     //     anime1.setTitle("Jujutsu Kaisen");
-//     //     anime1.setIntroduction(
-//     //             "Yuuji Itadori, a kind-hearted teenager with exceptional physical abilities, finds himself thrust into the world of curses and sorcery after a fateful encounter with a cursed object. Determined to protect");
-//     //     anime1.setTotalEpisodes((short) 24);
-//     //     anime1.setScheduleDay(DayOfWeek.SATURDAY);
-//     //     anime1.setScheduleTime(LocalTime.of(17, 0)); // 5:00 PM
-//     //     anime1.setPosterUrl("a1.png");
-//     //     anime1.setAnimeType(Anime.AnimeType.TV);
-//     //     anime1.setAnimeStatus(Anime.AnimeStatus.COMPLETED);
-//     //     anime1.setStudio(mappa);
-//     //     anime1.setSeason(fall2024);
-
-//     //     animeRepo.save(anime1);
-
-//     //     // Kimetsu no Yaiba
-//     //     Anime anime2 = new Anime();
-//     //     anime2.setTitle("Kimetsu no Yaiba");
-//     //     anime2.setIntroduction("In Taisho-era Japan, a kind-hearted ...");
-//     //     anime2.setTotalEpisodes((short) 26);
-//     //     anime2.setScheduleDay(DayOfWeek.SUNDAY);
-//     //     anime2.setScheduleTime(LocalTime.of(12, 0)); // 12:
-//     //     anime2.setPosterUrl("a1.png");
-//     //     anime2.setAnimeType(Anime.AnimeType.TV);
-//     //     anime2.setAnimeStatus(Anime.AnimeStatus.ONGOING);
-
-//     //     anime2.setStudio(mappa);
-//     //     anime2.setSeason(fall2024);
-
-//     //     animeRepo.save(anime2);
-//     // }
-
-//     // private static void seedEpisodes(EpisodeRepository episodeRepo, AnimeRepository animeRepo) {
-//     //     System.out.println("-> Seeding Episodes Table...");
-
-//     //     final String juTitle = "Jujutsu Kaisen";
-//     //     Anime anime1 = animeRepo.findBy("title", juTitle).getFirst();
-//     //     ;
-
-//     //     // 24 episodes
-//     //     for (int i = 1; i <= 24; i++) {
-//     //         Episode ep = new Episode();
-//     //         ep.setAnime(anime1);
-//     //         ep.setEpisodeNumber((short) i);
-//     //         ep.setEpisodeTitle(juTitle + " - Episode " + i);
-//     //         ep.setAirDate(LocalDateTime.now().plusDays(i * 7)); // weekly
-//     //         episodeRepo.save(ep);
-//     //     }
-
-//     //     final String kimetsuTitle = "Kimetsu no Yaiba";
-//     //     Anime anime2 = animeRepo.findBy("title", kimetsuTitle).getFirst();
-//     //     // 26 episodes
-//     //     for (int i = 1; i <= 26; i++) {
-//     //         Episode ep = new Episode();
-//     //         ep.setAnime(anime2);
-//     //         ep.setEpisodeNumber((short) i);
-//     //         ep.setEpisodeTitle(kimetsuTitle + " - Episode " + i);
-//     //         ep.setAirDate(LocalDateTime.now().plusDays(i * 7)); // weekly
-//     //         episodeRepo.save(ep);
-//     //     }
-//     // }
-
-//     // private static void seedTrackings(TrackingRepository trackingRepo, AccountRepository accRepo,
-//     //         AnimeRepository animeRepo) {
-//     //     System.out.println("-> Seeding Trackings Table...");
-
-//     //     Account user01 = accRepo.findByUsername("user01").isPresent()
-//     //             ? accRepo.findByUsername("user01").get()
-//     //             : null;
-//     //     Anime anime1 = animeRepo.findBy("title", "Jujutsu Kaisen").getFirst();
-//     //     Tracking tracking = new Tracking();
-//     //     tracking.setAccount(user01);
-//     //     tracking.setAnime(anime1);
-
-//     //     tracking.setTrackingStatus(Tracking.TrackingStatus.WATCHING);
-//     //     tracking.setLastWatchedEpisode((short) 5);
-//     //     tracking.setRating((byte) 3);
-//     //     tracking.setNote("TV360, good anime");
-//     //     trackingRepo.save(tracking);
-//     // }
-
-//     // private static void seedNotifications(NotificationRepository notifRepo, AccountRepository accRepo,
-//     //         AnimeRepository animeRepo) {
-//     //     System.out.println("-> Seeding Notifications Table...");
-//     //     Account user01 = accRepo.findByUsername("user01").orElseThrow();
-//     //     Notification notif1 = new Notification();
-//     //     Anime anime1 = animeRepo.findBy("title", "Jujutsu Kaisen").getFirst();
-
-//     //     notif1.setAccount(user01);
-//     //     notif1.setNotifiableType(Notification.NotifiableType.EPISODE_RELEASE);
-//     //     notif1.setNotifiableId(anime1.getId().longValue());
-
-//     //     notif1.setCreatedAt(LocalDateTime.now());
-//     //     notif1.setTitle("New episode released for " + anime1.getTitle());
-//     //     notif1.setIsRead(false);
-//     //     notifRepo.save(notif1);
-//     }
-
-// }
+    }
+}

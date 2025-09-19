@@ -2,9 +2,9 @@ package com.project;
 
 import com.project.navigation.SceneManager;
 import com.project.navigation.View;
-import com.project.util.AssetUtils;
+import com.project.util.AssetUtil;
 import com.project.util.JpaUtil;
-// import com.project.util.SeedData;
+import com.project.util.SeedData;
 
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -17,9 +17,9 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // SEED DATA //
-        // SeedData.seeds();
+        SeedData.seeds();
 
-        // ---------------- //
+        // ---------- Setup Primary Stage ------- //
         primaryStage = stage;
         primaryStage.setTitle("Tracking Anime Application");
         primaryStage.setWidth(1200);
@@ -30,7 +30,7 @@ public class Main extends Application {
         // inject Stage to SceneManager
         // SceneManager sceneManager = new SceneManager(primaryStage); // not change
         // sceneManager.switchTo(View.USER_DASHBOARD);
-        Parent root = AssetUtils.loadFXML("/DashboardView.fxml");
+        Parent root = AssetUtil.loadFXML("/DashboardView.fxml");
 
         primaryStage.getScene().setRoot(root);
         primaryStage.show();

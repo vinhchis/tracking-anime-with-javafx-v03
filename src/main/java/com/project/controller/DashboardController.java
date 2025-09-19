@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture;
 import com.project.navigation.View;
 import com.project.service.ApiService;
 import com.project.util.AlertUtil;
-import com.project.util.AssetUtils;
+import com.project.util.AssetUtil;
 import com.project.viewmodel.DashboardViewModel;
 import com.project.entity.Anime;
 
@@ -49,13 +49,13 @@ public class DashboardController implements Initializable {
         notiToggleButton.setOnAction(this::handleNotiToggle);
 
         // Load default view
-        Parent root = AssetUtils.loadFXML(View.OVERVIEW.getFxmlFile());
+        Parent root = AssetUtil.loadFXML(View.MY_LIST.getFxmlFile());
         mainBorderPane.setCenter(root);
 
 
         // Use ApiService.getAnimeById asynchronously to avoid blocking the FX thread
-        ApiService apiService = new ApiService();
-        fetchAndShowAnime(apiService, 1);
+        // ApiService apiService = new ApiService();
+        // fetchAndShowAnime(apiService, 1);
     }
 
     @FXML
@@ -65,13 +65,13 @@ public class DashboardController implements Initializable {
 
         switch (clickedButton.getId()) {
             case "overViewButton":
-                root = AssetUtils.loadFXML(View.OVERVIEW.getFxmlFile());
+                root = AssetUtil.loadFXML(View.OVERVIEW.getFxmlFile());
                 break;
             case "discoverButton":
-                root = AssetUtils.loadFXML(View.DISCOVER.getFxmlFile());
+                root = AssetUtil.loadFXML(View.DISCOVER.getFxmlFile());
                 break;
             case "myListButton":
-                root = AssetUtils.loadFXML(View.MY_LIST.getFxmlFile());
+                root = AssetUtil.loadFXML(View.MY_LIST.getFxmlFile());
                 break;
             default:
                 break;

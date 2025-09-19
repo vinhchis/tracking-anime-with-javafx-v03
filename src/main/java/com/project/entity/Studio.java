@@ -4,10 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.Set;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+    @AllArgsConstructor
 @Entity
 @Table(name = "Studios")
 public class Studio {

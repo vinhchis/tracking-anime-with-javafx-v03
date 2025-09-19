@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+
+<fx:root type="HBox"
+         xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml">
+    <children>
+        <Label text="Choice Time:"/>
+        <TextField fx:id="textField" editable="false" promptText="HH:mm"/>
+        <HBox fx:id="spinnerBox" spacing="5" visible="false">
+            <Spinner fx:id="hourSpinner" prefWidth="60"/>
+            <Spinner fx:id="minuteSpinner" prefWidth="60"/>
+        </HBox>
+    </children>
+</fx:root>
+

@@ -14,7 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 
-public class AssetUtils {
+public class AssetUtil {
     private static final String BASE = "/com/project";
 
      public static Parent loadFXML(String name) {
@@ -45,18 +45,17 @@ public class AssetUtils {
         }
     }
 
-    // get from computer ~.tracking-anime/images/<filename>
-    public static Image getImageFromComputer(String filename) {
-        String userHome = System.getProperty("user.home"); // C:\Users\<user> |/home/<user>
-        Path storageDirectory = Paths.get(userHome, ".tracking-anime", "images");
+    // get image from images folder of project (on project/images/<filename> folder)
+    public static Image getImageFromProject(String filename) {
         if (filename == null || filename.isBlank()) {
             return null;
         }
-
         try {
-            Path imagePath = storageDirectory.resolve(filename);
+            Path imagePath = Paths.get(System.getProperty("user.dir"),"images", filename);
             if (Files.exists(imagePath)) {
                 return new Image(imagePath.toUri().toString());
+            }else{
+               // fallback to resource images
             }
         } catch (Exception e) {
             System.err.println("Can't get file: " + e.getMessage());
@@ -64,6 +63,27 @@ public class AssetUtils {
         }
         return null;
     }
+
+
+    // get from computer ~.tracking-anime/images/<filename>
+    // public static Image getImageFromComputer(String filename) {
+    //     String userHome = System.getProperty("user.home"); // C:\Users\<user> |/home/<user>
+    //     Path storageDirectory = Paths.get(userHome, ".tracking-anime", "images");
+    //     if (filename == null || filename.isBlank()) {
+    //         return null;
+    //     }
+
+    //     try {
+    //         Path imagePath = storageDirectory.resolve(filename);
+    //         if (Files.exists(imagePath)) {
+    //             return new Image(imagePath.toUri().toString());
+    //         }
+    //     } catch (Exception e) {
+    //         System.err.println("Can't get file: " + e.getMessage());
+    //         e.printStackTrace();
+    //     }
+    //     return null;
+    // }
 
 
 }

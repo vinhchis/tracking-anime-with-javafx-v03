@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.Set;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,7 +19,7 @@ public class Anime {
     private Integer id;
 
     @Column(name = "api_id", length = 20, unique = true, nullable = true)
-    private String api_id; // Jikan API ID
+    private String apiId; // Jikan API ID
 
     @Column(length = 50, nullable = false)
     private String title;

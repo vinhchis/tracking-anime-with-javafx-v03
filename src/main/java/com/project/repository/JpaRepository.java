@@ -117,7 +117,7 @@ public abstract class JpaRepository<T, ID> implements GenericRepository<T, ID> {
         }
     }
 
-     @Override
+    @Override
     public List<T> findBy(String attributeName, Object value) {
         EntityManager em = emf.createEntityManager();
         try {
@@ -136,8 +136,13 @@ public abstract class JpaRepository<T, ID> implements GenericRepository<T, ID> {
             em.close();
         }
     }
+
+    // Thêm các hàm cần thiết cho StatisticsService
+    public long countAll() {
+        return this.count();
+    }
+
+    public List<T> findByStatus(Object status) {
+        return this.findBy("trackingStatus", status);
+    }
 }
-/*
- * Only for Entity : Account, Season and Studio
- * Need findBy to for : Anime, Episode, Tracking, Notification
- */

@@ -1,11 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+
 <?import javafx.scene.control.Label?>
+
+<?import javafx.scene.control.ScrollPane?>
+
 <?import javafx.scene.layout.BorderPane?>
 
+<?import javafx.scene.layout.GridPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.controller.OverviewController">
+<?import javafx.scene.layout.HBox?>
+
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.text.Font?>
+
+<BorderPane styleClass="root-pane" xmlns="https://www.google.com/search?q=http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.controller.OverviewController">
    <top>
-      <Label text="Overview" BorderPane.alignment="CENTER" />
+      <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" text="Thống Kê Cá Nhân" styleClass="title-label">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
    </top>
+   <center>
+      <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+         <content>
+            <VBox spacing="20.0" alignment="CENTER" styleClass="overview-container">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+               <children>
+                  <!-- Thống kê tổng quan về số lượng -->
+                  <HBox alignment="CENTER" spacing="20.0">
+                     <children>
+                        <VBox styleClass="stat-card" alignment="CENTER">
+                           <children>
+                              <Label styleClass="stat-value" fx:id="totalAnimeLabel" text="0" />
+                              <Label styleClass="stat-label" text="Tổng số Anime" />
+                           </children>
+                        </VBox>
+                        <VBox styleClass="stat-card" alignment="CENTER">
+                           <children>
+                              <Label styleClass="stat-value" fx:id="completedAnimeLabel" text="0" />
+                              <Label styleClass="stat-label" text="Đã hoàn thành" />
+                           </children>
+                        </VBox>
+                        <VBox styleClass="stat-card" alignment="CENTER">
+                           <children>
+                              <Label styleClass="stat-value" fx:id="watchingAnimeLabel" text="0" />
+                              <Label styleClass="stat-label" text="Đang theo dõi" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+
+                  <!-- Placeholder cho biểu đồ thống kê theo thể loại -->
+                  <GridPane fx:id="genreStatsGrid" hgap="10.0" vgap="10.0" alignment="CENTER" styleClass="stats-grid">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                     <children>
+                        <Label text="Thống kê theo Thể loại" styleClass="section-title" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" />
+                        <!-- Nội dung sẽ được thêm bằng code JavaFX trong OverviewController -->
+                     </children>
+                  </GridPane>
+
+                  <!-- Placeholder cho biểu đồ thống kê theo mùa -->
+                  <GridPane fx:id="seasonStatsGrid" hgap="10.0" vgap="10.0" alignment="CENTER" styleClass="stats-grid">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                     <children>
+                        <Label text="Thống kê theo Mùa" styleClass="section-title" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" />
+                        <!-- Nội dung sẽ được thêm bằng code JavaFX trong OverviewController -->
+                     </children>
+                  </GridPane>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+
+   </center>
 </BorderPane>

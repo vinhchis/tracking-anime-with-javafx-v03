@@ -47,7 +47,7 @@ public class SceneManager{
 
             stage.getScene().setRoot(root);
             if(controller instanceof Refreshable){
-                ((Refreshable) controller).onFresh();
+                ((Refreshable) controller).refresh();
             }
 
 

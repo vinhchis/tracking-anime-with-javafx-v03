@@ -11,24 +11,24 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="myListBorderPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="1200.0" style="-fx-background-color: red;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.controller.MyListController">
+<BorderPane fx:id="myListBorderPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.controller.MyListController">
    <top>
-      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Anime List: ">
+            <Text fill="#4925a4" strokeType="OUTSIDE" strokeWidth="0.0" text="Anime List: ">
                <font>
-                  <Font name="System Bold" size="24.0" />
+                  <Font name="System Bold Italic" size="24.0" />
                </font>
             </Text>
             <ComboBox fx:id="filterStatusComboBox" prefHeight="34.0" prefWidth="150.0" promptText="Select a status" />
-            <Label fx:id="totalAnimeLabel" text="10">
+            <Label fx:id="totalAnimeLabel" alignment="CENTER" prefHeight="33.0" prefWidth="37.0" style="-fx-border-width: 2px; -fx-border-color: red; -fx-border-radius: 50px;" text="10" wrapText="true">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="animes">
+            <Text fill="#e41919" strokeType="OUTSIDE" strokeWidth="0.0" text="animes">
                <font>
-                  <Font size="20.0" />
+                  <Font name="System Bold" size="20.0" />
                </font>
             </Text>
          </children>
@@ -38,18 +38,14 @@
       </HBox>
    </top>
    <center>
-      <ScrollPane BorderPane.alignment="CENTER">
+      <ScrollPane BorderPane.alignment="CENTER" fitToWidth="true">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0">
-               <children>
-                  <FlowPane fx:id="trackingFlowPane" hgap="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="420.0" prefWidth="1200.0" style="-fx-background-color: blue;" vgap="24.0">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </FlowPane>
-               </children>
-            </AnchorPane>
-        </content>
+        <FlowPane fx:id="trackingFlowPane" hgap="20.0" vgap="24.0">
+           <padding>
+              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+           </padding>
+        </FlowPane>
+      </content>
       </ScrollPane>
    </center>
 </BorderPane>

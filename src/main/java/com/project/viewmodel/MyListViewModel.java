@@ -87,8 +87,6 @@ public class MyListViewModel {
 
     public void updateTrackingCardInfo(TrackingCard card) {
         TrackingDto dto = card.getData();
-        // trackingService.updateTracking(dto);
-        // Update in trackingList
         for (int i = 0; i < trackingList.size(); i++) {
             if (trackingList.get(i).getTrackingId() == dto.getTrackingId()) {
                 trackingList.set(i, dto);

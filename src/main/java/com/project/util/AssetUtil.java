@@ -65,28 +65,10 @@ public class AssetUtil {
     }
 
 
-    // get from computer ~.tracking-anime/images/<filename>
-    // public static Image getImageFromComputer(String filename) {
-    //     String userHome = System.getProperty("user.home"); // C:\Users\<user> |/home/<user>
-    //     Path storageDirectory = Paths.get(userHome, ".tracking-anime", "images");
-    //     if (filename == null || filename.isBlank()) {
-    //         return null;
-    //     }
-
-    //     try {
-    //         Path imagePath = storageDirectory.resolve(filename);
-    //         if (Files.exists(imagePath)) {
-    //             return new Image(imagePath.toUri().toString());
-    //         }
-    //     } catch (Exception e) {
-    //         System.err.println("Can't get file: " + e.getMessage());
-    //         e.printStackTrace();
-    //     }
-    //     return null;
-    // }
-
+    public static String getCss(String name){
+        String pathName = BASE + "/css/" + name;
+        return Objects.requireNonNull(Main.class.getResource(pathName)).toExternalForm();
+    }
 
 }
-/*
- * src/main/resources/images/logo.png
- */
+

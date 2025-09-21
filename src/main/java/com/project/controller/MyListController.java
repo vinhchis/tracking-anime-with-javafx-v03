@@ -99,6 +99,11 @@ public class MyListController implements Initializable, Saveable {
             viewModel.updateTrackingCardInfo(card);
         });
 
+        card.getTimePicker().valueProperty().addListener((obs, oldVal, newVal) -> {
+            viewModel.updateTrackingCardInfo(card);
+        });
+
+
 
         return card;
     }

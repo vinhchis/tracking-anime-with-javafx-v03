@@ -1,6 +1,6 @@
-/* --- Nền và khung của Card --- */
+/* --- Container chính của Card --- */
 .tracking-card {
-    -fx-background-color: white;
+    -fx-background-color: #6D94C5;
     -fx-background-radius: 12px;
     -fx-border-color: #E0E0E0; /* Màu viền xám nhạt */
     -fx-border-width: 1px;
@@ -8,31 +8,43 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 15, 0.2, 0, 4); /* Hiệu ứng đổ bóng mềm */
 }
 
-/* --- Hình ảnh --- */
+/* --- Hình ảnh và Nút Xóa --- */
 .tracking-card .image-view {
     /* Bo góc trên của hình ảnh để khớp với card */
     -fx-background-radius: 12px 12px 0 0;
 }
 
-/* --- Tiêu đề chính --- */
-.tracking-card .label {
-    -fx-font-family: "System Bold";
+#deleteButton {
+    -fx-pref-width: 36px;
+    -fx-pref-height: 36px;
+    -fx-padding: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 1);
+}
+#deleteButton:hover {
+    -fx-background-color: rgba(211, 47, 47, 1.0); /* Đậm hơn khi di chuột */
+}
+#deleteButton .image-view {
+    -fx-fit-height: 36px;
+    -fx-fit-width: 36px;
 }
 
+
+/* --- Tiêu đề chính --- */
 #titleLabel {
     -fx-font-size: 22px;
+    -fx-font-weight: bold;
     -fx-text-fill: #212121; /* Màu chữ đen đậm */
+    -fx-padding: 5px 10px 0 10px; /* Thêm padding cho tiêu đề */
 }
 
 /* --- Các label thông tin phụ --- */
-#seasonLabel, #studioLabel, #animeTypeLabel, #episodeProgressLabel {
-    -fx-font-size: 14px;
+#seasonNameLabel, #seasonYearLabel, #studioLabel, #animeTypeLabel {
+    -fx-font-size: 13px;
     -fx-text-fill: #757575; /* Màu chữ xám vừa */
-    -fx-font-family: "System";
 }
 
-/* --- Tag Trạng thái --- */
-#statusTagLabel {
+/* --- Tag Trạng thái Anime --- */
+#animeStatusLabel {
     -fx-background-color: #E3F2FD; /* Màu nền xanh nhạt */
     -fx-text-fill: #1E88E5;       /* Màu chữ xanh đậm */
     -fx-font-size: 12px;
@@ -41,34 +53,52 @@
     -fx-background-radius: 6px;
 }
 
-/* --- Nút bấm Cộng/Trừ --- */
-#decreaseBtn, #increaseBtn {
-    -fx-background-color: #F5F5F5; /* Nền xám nhạt */
-    -fx-background-radius: 8px;
+/* --- Text "Total Episode:" --- */
+.tracking-card .text {
     -fx-font-size: 14px;
+    -fx-fill: #424242;
+}
+#totalEpisodesLabel {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
     -fx-text-fill: #424242;
 }
 
+/* --- Label tiến độ Episode --- */
+#episodeProgressLabel {
+    -fx-font-size: 14px;
+    -fx-text-fill: #616161;
+}
+
+/* --- Nút bấm Cộng/Trừ --- */
+#decreaseBtn, #increaseBtn {
+    -fx-background-color: #F5F5F5;
+    -fx-background-radius: 8px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #424242;
+    -fx-min-width: 32px;
+    -fx-min-height: 32px;
+}
 #decreaseBtn:hover, #increaseBtn:hover {
-    -fx-background-color: #E0E0E0; /* Hiệu ứng khi di chuột */
+    -fx-background-color: #E0E0E0;
 }
 
 /* --- Thanh tiến độ --- */
 #progressBar .bar {
    -fx-background-color: #1976D2; /* Màu xanh của thanh tiến độ */
    -fx-background-insets: 1;
-   -fx-padding: 3px;
+   -fx-padding: 4px; /* Làm thanh dày hơn một chút */
+   -fx-background-radius: 4px;
 }
 #progressBar {
-    -fx-background-radius: 5px;
     -fx-accent: #E0E0E0; /* Màu nền của thanh */
+    -fx-background-radius: 5px;
 }
 
 /* --- ComboBox Trạng thái theo dõi --- */
-#trackingStatusComboBox {
-    -fx-background-color: #F5F5F5;
-    -fx-font-family: "System";
+#trackingStatusComboBox, #scheduleDayComboBox {
     -fx-font-size: 13px;
+    -fx-background-color: #F5F5F5;
 }
 
 /* --- Nút Ghi chú --- */

@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.controlsfx.control.Rating?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0" prefWidth="333.0" spacing="10.0" type="VBox" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="346.0" spacing="10.0" stylesheets="@../css/tracking-card.css" type="VBox" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <StackPane alignment="TOP_RIGHT" VBox.vgrow="ALWAYS">
          <children>
@@ -26,7 +26,14 @@
                   <Image url="@../images/animes/a1.png" />
                </image>
             </ImageView>
-            <Button fx:id="deleteButton" alignment="CENTER" mnemonicParsing="false" text="Delete" />
+            <Button fx:id="deleteButton" alignment="CENTER" mnemonicParsing="false">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/icons8-remove-48.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
          </children>
       </StackPane>
       <Label fx:id="titleLabel" text="One Piece" underline="true" wrapText="true">
@@ -34,7 +41,7 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <HBox prefHeight="33.0" prefWidth="405.0" spacing="20.0">
+      <HBox prefWidth="405.0" spacing="20.0">
          <children>
             <Label fx:id="seasonNameLabel" text="Summer ">
                <font>
@@ -63,7 +70,7 @@
             <Font name="System Bold Italic" size="16.0" />
          </font>
       </Label>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="40.0">
+      <HBox prefWidth="200.0" spacing="40.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Episode:">
                <font>
@@ -102,18 +109,16 @@
          </children>
       </HBox>
       <ProgressBar fx:id="progressBar" prefHeight="20.0" prefWidth="414.0" progress="0.0" />
-      <Label text="Schedule" />
-      <HBox prefHeight="33.0" prefWidth="305.0">
+      <VBox fx:id="scheduleBox" prefWidth="100.0" spacing="5.0">
          <children>
+            <Label text="Schedule :" />
             <ComboBox fx:id="scheduleDayComboBox" prefWidth="150.0" promptText="Day:" />
-            <Region prefHeight="33.0" prefWidth="96.0" HBox.hgrow="ALWAYS" />
-            <Label fx:id="scheduleTimeLabel" text="20:30" />
          </children>
-      </HBox>
+      </VBox>
       <Rating fx:id="rating" />
       <ComboBox fx:id="trackingStatusComboBox" prefHeight="26.0" prefWidth="196.0" promptText="Status" />
       <ToggleButton fx:id="noteToggleButton" mnemonicParsing="false" text="View Notes" />
-      <TextArea fx:id="noteTextArea" prefHeight="200.0" prefWidth="200.0" promptText="Enter your notes" />
+      <TextArea fx:id="noteTextArea" prefHeight="20.0" prefWidth="326.0" promptText="Enter your notes" />
    </children>
    <padding>
       <Insets bottom="20.0" left="10.0" right="10.0" />

@@ -2,6 +2,7 @@ package com.project.shared;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 import org.controlsfx.control.Rating;
@@ -52,9 +53,9 @@ public class TrackingCard extends VBox implements Initializable {
     @FXML
     private ComboBox<TRACKINGS_STATUS> trackingStatusComboBox;
     @FXML
-    private ComboBox<DAY_OF_WEEK> scheduleDayComboBox;
+    private VBox scheduleBox;
     @FXML
-    private Label scheduleTimeLabel; // change later to time picker
+    private ComboBox<DAY_OF_WEEK> scheduleDayComboBox;
     @FXML
     private TextArea noteTextArea;
 
@@ -73,6 +74,11 @@ public class TrackingCard extends VBox implements Initializable {
     private Button decreaseBtn;
 
     private TrackingDto dto;
+    private CustomTimePicker timePicker = new CustomTimePicker();
+
+    public CustomTimePicker getTimePicker() {
+        return timePicker;
+    }
 
     public TrackingCard() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/project/shared/TrackingCard.fxml"));
@@ -83,11 +89,13 @@ public class TrackingCard extends VBox implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load TrackingCard FXML", e);
         }
-
+        this.getStylesheets().add(AssetUtil.getCss("tracking-card.css"));
     }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+        scheduleBox.getChildren().add(timePicker);
+
         trackingStatusComboBox.getItems().setAll(TRACKINGS_STATUS.values());
         scheduleDayComboBox.getItems().setAll(Tracking.DAY_OF_WEEK.values());
 
@@ -96,7 +104,6 @@ public class TrackingCard extends VBox implements Initializable {
         noteToggleButton.setOnAction(e -> {
             noteTextArea.setVisible(noteToggleButton.isSelected());
         });
-
     }
 
     public void setData(TrackingDto trackingDto) {
@@ -106,10 +113,11 @@ public class TrackingCard extends VBox implements Initializable {
         rating.setRating(dto.getRating());
         trackingStatusComboBox.setValue(dto.getTrackingStatus());
         scheduleDayComboBox.setValue(dto.getScheduleDay());
+        timePicker.setValue(dto.getScheduleLocalTime());
         if (dto.getScheduleLocalTime() != null) {
-            scheduleTimeLabel.setText(dto.getScheduleLocalTime().toString());
+           timePicker.setValue(dto.getScheduleLocalTime());
         } else {
-            scheduleTimeLabel.setText("Not Set");
+              timePicker.setValue(LocalTime.of(19, 30)); // default 7:30 PM
         }
         noteTextArea.setText(dto.getNote());
 
@@ -176,6 +184,7 @@ public class TrackingCard extends VBox implements Initializable {
         dto.setRating((byte) rating.getRating());
         dto.setTrackingStatus(trackingStatusComboBox.getValue());
         dto.setScheduleDay(scheduleDayComboBox.getValue());
+        dto.setScheduleLocalTime(timePicker.getValue());
         dto.setNote(noteTextArea.getText());
         return dto;
     }

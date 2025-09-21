@@ -1,0 +1,52 @@
+.anime-card {
+  -fx-background-color: white;
+  -fx-background-radius: 12;
+  -fx-border-radius: 12;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 5);
+  /* pref width is still set in Java */
+}
+
+/* Badge style used for typeLabel and statusLabel */
+.badge {
+  -fx-background-color: #eee;
+  -fx-padding: 3 8;
+  -fx-background-radius: 12;
+}
+
+/* Top-right circular add button */
+.add-top-btn {
+  -fx-background-color: black;
+  -fx-text-fill: white;
+  -fx-background-radius: 50%;
+  -fx-padding: 4 8;
+}
+
+/* Title label styling */
+.title {
+  -fx-font-size: 16px;
+  -fx-font-weight: bold;
+}
+
+/* Eps label emphasis */
+.eps {
+  -fx-font-weight: bold;
+}
+
+.score {
+  -fx-font-weight: bold;
+}
+
+/* Bottom add button */
+.add-btn {
+  -fx-background-color: black;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-background-radius: 8;
+}
+
+.detail-btn {
+  -fx-background-color: gray;
+  -fx-text-fill: red;
+  -fx-font-weight: bold;
+  -fx-background-radius: 8;
+}

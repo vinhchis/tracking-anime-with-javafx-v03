@@ -28,7 +28,7 @@ public class TrackingDto {
 
     // from anime
     private Long animeId;
-    private String apiId;
+    private Integer apiId;
     private String animeTitle;
     private ANIME_STATUS animeStatus;
     private ANIME_TYPE animeType;

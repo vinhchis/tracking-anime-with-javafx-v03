@@ -70,5 +70,16 @@ public class AssetUtil {
         return Objects.requireNonNull(Main.class.getResource(pathName)).toExternalForm();
     }
 
+    // "https://cdn.myanimelist.net/images/anime/1015/138006.jpg"
+    public static Image getImageFromLink(String posterUrl) {
+        try {
+            return new Image(posterUrl, true);
+        } catch (Exception e) {
+            System.err.println("Can't load image from link: " + posterUrl);
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
 

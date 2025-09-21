@@ -103,7 +103,7 @@ public class SeedData {
 
             Tracking tracking1 = Tracking.builder()
                     .trackingStatus(TRACKINGS_STATUS.WATCHING)
-                    .lastWatchedEpisode((short)4)
+                    .lastWatchedEpisode((short)1)
                     .scheduleDay(Tracking.DAY_OF_WEEK.SATURDAY)
                     .scheduleTime(LocalTime.of(18, 30))
                     .rating((byte)4)
@@ -113,7 +113,7 @@ public class SeedData {
 
             Tracking tracking2 = Tracking.builder()
                     .trackingStatus(TRACKINGS_STATUS.PLAN_TO_WATCH)
-                    .lastWatchedEpisode((short)0)
+                    .lastWatchedEpisode((short)14)
                     .scheduleDay(Tracking.DAY_OF_WEEK.SUNDAY)
                     .scheduleTime(LocalTime.of(20, 0))
                     .rating((byte)0)

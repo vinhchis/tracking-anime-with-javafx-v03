@@ -1,0 +1,36 @@
+/* --- Style cho container chính (HBox) --- */
+.custom-time-picker {
+    -fx-background-color: #f5f5f5;
+    -fx-padding: 8px;
+    -fx-background-radius: 8px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 8px;
+}
+
+/* --- Style cho ComboBox chọn giờ và phút --- */
+.time-picker-combo {
+    -fx-background-color: white;
+    -fx-font-size: 14px;
+    -fx-pref-width: 70px;
+}
+
+/* --- Style cho dấu hai chấm ":" --- */
+.time-picker-separator {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 2px;
+}
+
+/* --- Style cho nút AM/PM --- */
+.am-pm-toggle {
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: #424242;
+    -fx-font-size: 13px;
+    -fx-background-radius: 6px;
+}
+
+/* Style khi nút AM/PM được chọn (ví dụ: PM) */
+.am-pm-toggle:selected {
+    -fx-background-color: #007bff; /* Màu xanh dương */
+    -fx-text-fill: white;
+}

@@ -1,0 +1,20 @@
+.button {
+    -fx-background-color: #3498db;   /* nền */
+    -fx-text-fill: white;            /* màu chữ */
+    -fx-font-size: 14px;             /* cỡ chữ */
+    -fx-padding: 8 16;               /* khoảng cách */
+    -fx-background-radius: 5;        /* bo tròn */
+}
+
+.button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.button:pressed {
+    -fx-background-color: #1c5980;
+}
+
+.button:focused {
+    -fx-border-color: #f39c12;
+    -fx-border-width: 2;
+}

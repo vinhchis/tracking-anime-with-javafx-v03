@@ -1,0 +1,145 @@
+/* Root card */
+.tracking-card {
+  -fx-background-color: linear-gradient(to bottom right, #ffffff, #f6f8fb 60%);
+  -fx-background-radius: 12;
+  -fx-border-radius: 12;
+  -fx-padding: 10;
+  -fx-border-color: rgba(20,30,60,0.06);
+  -fx-border-width: 1;
+  -fx-effect: dropshadow(gaussian, rgba(18,24,40,0.10), 18, 0, 0, 8);
+  -fx-max-width: 250px;
+}
+
+#posterImageView Image {
+  -fx-fit-width: 225px;
+  -fx-fit-height: 318px;
+  -fx-preserve-ratio: true;
+  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.18), 8, 0, 0, 6);
+  -fx-background-radius: 10 10 0 0;
+  -fx-clip: null;
+  -fx-smooth: true;
+}
+
+/* Delete button overlay top-right */
+#deleteButton {
+  -fx-background-color: rgba(255,255,255,0.88);
+  -fx-background-radius: 8;
+  -fx-padding: 6;
+  -fx-cursor: hand;
+  -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 6, 0, 0, 2);
+  -fx-border-color: rgba(0,0,0,0.06);
+  -fx-border-width: 1;
+}
+#deleteButton:hover {
+  -fx-background-color: linear-gradient(to bottom right, #ff5252, #e53935);
+  -fx-text-fill: white;
+}
+
+/* Title */
+#titleLabel {
+  -fx-font-size: 24px;
+  -fx-font-weight: 700;
+  -fx-text-fill: #001646;
+  -fx-padding: 8 4 0 4;
+}
+
+/* Meta row (season, year, studio, type) */
+#seasonNameLabel, #seasonYearLabel, #studioLabel, #animeTypeLabel {
+  /* -fx-font-size: 13px;
+  -fx-text-fill: #555; */
+   -fx-background-color: linear-gradient(to right, #f9f5f0, #b95e82);
+  -fx-text-fill: #234c6a;
+  -fx-padding: 4 10;
+  -fx-background-radius: 12;
+  -fx-font-size: 12px;
+  -fx-font-weight: bold;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.12), 4, 0, 0, 2);
+}
+
+/* Status badge */
+#animeStatusLabel {
+  -fx-background-color: linear-gradient(to right, #fff7e6, #fff1f0);
+  -fx-text-fill: #c84a4a;
+  -fx-padding: 6 10;
+  -fx-background-radius: 10;
+  -fx-font-weight: 700;
+  -fx-alignment: center-left;
+}
+
+/* Episode info row */
+/* .text {
+  -fx-font-size: 14px;
+  -fx-text-fill: #333;
+} */
+
+#totalEpisodesLabel, #episodeProgressLabel {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #1B3C53
+}
+
+/* Decrease/Increase buttons */
+#decreaseBtn, #increaseBtn {
+  -fx-background-color: #f5f7fa;
+  -fx-background-radius: 8;
+  -fx-padding: 6 10;
+  -fx-font-size: 14px;
+  -fx-cursor: hand;
+  -fx-border-color: rgba(0,0,0,0.04);
+  -fx-border-width: 1;
+}
+#decreaseBtn:hover, #increaseBtn:hover {
+  -fx-background-color: #e8eef8;
+}
+
+/* Progress bar styling */
+#progressBar .bar {
+  -fx-background-color: linear-gradient(to right, #1e90ff, #4facfe);
+  -fx-background-radius: 6;
+  -fx-padding: 0.5;
+}
+#progressBar {
+  -fx-background-color: rgba(0,0,0,0.04);
+  -fx-background-radius: 6;
+  -fx-pref-height: 14px;
+}
+
+/* Schedule and tracking controls */
+#scheduleBox, #trackingStatusComboBox, #scheduleDayComboBox {
+  -fx-padding: 6 0 6 0;
+}
+#trackingStatusComboBox, #scheduleDayComboBox {
+  -fx-background-color: #fff;
+  -fx-border-color: rgba(0,0,0,0.06);
+  -fx-border-radius: 6;
+}
+
+/* Rating control (controlsfx) tweak */
+.rating {
+  -fx-padding: 6 0;
+}
+
+/* Note area */
+#noteToggleButton {
+  -fx-background-color: transparent;
+  -fx-border-color: rgba(0,0,0,0.06);
+  -fx-border-radius: 6;
+  -fx-padding: 6 10;
+  -fx-cursor: hand;
+}
+#noteTextArea {
+  -fx-border-color: rgba(0,0,0,0.06);
+  -fx-border-radius: 6;
+  -fx-padding: 8;
+  -fx-font-size: 13px;
+}
+
+/* Responsive tweaks */
+@media screen and (max-width: 420px) {
+  .tracking-card {
+    -fx-padding: 8;
+  }
+  #titleLabel {
+    -fx-font-size: 18px;
+  }
+}

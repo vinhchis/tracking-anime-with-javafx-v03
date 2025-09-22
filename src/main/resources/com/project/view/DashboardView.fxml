@@ -16,7 +16,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.controller.DashboardController">
+<BorderPane fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.controller.DashboardController">
    <top>
       <AnchorPane prefHeight="210.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
          <children>
@@ -24,7 +24,7 @@
                <children>
                   <ImageView fitHeight="88.0" fitWidth="114.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/anime_logo.png" />
+                        <Image url="@../images/anime_logo.png" />
                      </image>
                   </ImageView>
                   <VBox alignment="CENTER_LEFT" prefHeight="83.0" prefWidth="218.0">
@@ -54,7 +54,7 @@
                      <graphic>
                         <ImageView fitHeight="49.0" fitWidth="79.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/icons/icons8-bell-100.png" />
+                              <Image url="@../images/icons/icons8-bell-100.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -88,7 +88,7 @@
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/icons/icons8-analytics-32.png" />
+                              <Image url="@../images/icons/icons8-analytics-32.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -97,7 +97,7 @@
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/icons/icons8-home-50.png" />
+                              <Image url="@../images/icons/icons8-home-50.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -106,7 +106,7 @@
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/icons/icons8-search-30.png" />
+                              <Image url="@../images/icons/icons8-search-30.png" />
                            </image>
                         </ImageView>
                      </graphic>

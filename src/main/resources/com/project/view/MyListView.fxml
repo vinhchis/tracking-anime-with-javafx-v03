@@ -1,11 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.controller.MyListController">
+<BorderPane fx:id="myListBorderPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.controller.MyListController">
    <top>
-      <Label text="MyList" BorderPane.alignment="CENTER" />
+      <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Text fill="#4925a4" strokeType="OUTSIDE" strokeWidth="0.0" text="Anime List: ">
+               <font>
+                  <Font name="System Bold Italic" size="24.0" />
+               </font>
+            </Text>
+            <ComboBox fx:id="filterStatusComboBox" prefHeight="43.0" prefWidth="210.0" promptText="Select a status" style="-fx-background-color: white; -fx-font-size: 20px;" />
+            <Label fx:id="totalAnimeLabel" alignment="CENTER" prefHeight="33.0" prefWidth="37.0" style="-fx-border-width: 2px; -fx-text-fill: #ED3F27; -fx-border-color: #ED3F27; -fx-border-radius: 200px;" text="10" wrapText="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <effect>
+                  <DropShadow height="121.57" radius="55.8375" spread="0.35" width="103.78">
+                     <color>
+                        <Color red="0.8026315569877625" green="0.06317007541656494" blue="0.06317007541656494" opacity="0.5600000023841858" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </Label>
+            <Text fill="#e41919" strokeType="OUTSIDE" strokeWidth="0.0" text="animes">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Text>
+            <Region prefHeight="43.0" prefWidth="625.0" HBox.hgrow="ALWAYS" />
+            <Label>
+               <tooltip>
+                  <Tooltip fx:id="warningTooltip" wrapText="true" />
+               </tooltip>
+               <font>
+                  <Font size="24.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icons/icons8-warning-48.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="20.0" top="10.0" />
+         </BorderPane.margin>
+      </HBox>
    </top>
+   <center>
+      <ScrollPane fitToWidth="true" BorderPane.alignment="CENTER">
+        <content>
+        <FlowPane fx:id="trackingFlowPane" hgap="20.0" vgap="24.0">
+           <padding>
+              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+           </padding>
+        </FlowPane>
+      </content>
+      </ScrollPane>
+   </center>
 </BorderPane>

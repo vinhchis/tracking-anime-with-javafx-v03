@@ -10,19 +10,19 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnimeCardDto {
-    private int animeId;
+    private Long animeId; // can be null for new anime
+    private Integer apiId;
     private String title;
+    private String synopsis;
+    private String url;
     private String posterUrl;
     private String animeStatus;
     private String animeType;
     private Short totalEpisodes;
-    private String scheduleDay;
-    private String scheduleTime;
-    private String studioName;
-    private String seasonName;
-    private int seasonYear;
+    private Double score;
 
-    //
-    private int studioId;
+    private String studioName; // can be null
 
+    private String seasonName; // can be null
+    private Short seasonYear; // can be null
 }

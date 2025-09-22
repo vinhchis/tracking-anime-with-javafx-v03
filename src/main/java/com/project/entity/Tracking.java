@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,11 +15,11 @@ public class Tracking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tracking_id")
-    private Integer id;
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tracking_status", length = 15)
-    private TrackingStatus trackingStatus;
+    private TRACKINGS_STATUS trackingStatus;
 
     @Column(name = "last_watched_episode")
     private Short lastWatchedEpisode;
@@ -30,7 +31,7 @@ public class Tracking {
     @Column(name = "schedule_time")
     private LocalTime scheduleTime;
 
-    @Column(name = "rating", columnDefinition = "BIT DEFAULT 0")
+    @Column(name = "rating")
     private Byte rating;
 
     @Column(columnDefinition = "NVARCHAR(MAX)")
@@ -42,7 +43,7 @@ public class Tracking {
     private Anime anime;
 
 
-    public enum TrackingStatus {
+    public enum TRACKINGS_STATUS {
         WATCHING, COMPLETED, ON_HOLD, DROPPED, PLAN_TO_WATCH
     }
 

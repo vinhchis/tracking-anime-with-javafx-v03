@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.project.util.JpaUtil;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -18,8 +20,8 @@ public abstract class JpaRepository<T, ID> implements GenericRepository<T, ID> {
     private final Class<T> entityClass;
 
     @SuppressWarnings("unchecked")
-    public JpaRepository(EntityManagerFactory emf) {
-        this.emf = emf;
+    public JpaRepository() {
+        this.emf = JpaUtil.getEntityManagerFactory();
         this.entityClass = (Class<T>) ((ParameterizedType) getClass()
                 .getGenericSuperclass()).getActualTypeArguments()[0];
     }

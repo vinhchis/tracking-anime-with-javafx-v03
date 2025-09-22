@@ -4,17 +4,18 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.Set;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+    @AllArgsConstructor
 @Entity
 @Table(name = "Studios")
 public class Studio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "studio_id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "studio_name", length = 100, nullable = false, unique = true)
     private String studioName;

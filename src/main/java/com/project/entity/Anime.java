@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.Set;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,10 +16,10 @@ public class Anime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "anime_id")
-    private Integer id;
+    private Long id;
 
-    @Column(name = "api_id", length = 20, unique = true, nullable = true)
-    private String api_id; // Jikan API ID
+    @Column(name = "api_id", unique = true, nullable = true)
+    private Integer apiId; // Jikan API ID
 
     @Column(length = 50, nullable = false)
     private String title;

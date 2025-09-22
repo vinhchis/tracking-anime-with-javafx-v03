@@ -2,7 +2,6 @@ package com.project.shared;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 import org.controlsfx.control.Rating;
@@ -131,7 +130,7 @@ public class TrackingCard extends VBox implements Initializable {
 
         // Set anime info
         titleLabel.setText(dto.getAnimeTitle());
-        Image posterImage = AssetUtil.getImageFromProject(dto.getImageUrl());
+        Image posterImage = AssetUtil.getImageFromLocal(dto.getImageUrl());
         posterImageView.setImage(posterImage);
         animeTypeLabel.setText(dto.getAnimeType() != null ? dto.getAnimeType().toString() : "N/A");
         animeStatusLabel.setText(dto.getAnimeStatus() != null ? dto.getAnimeStatus().toString() : "N/A");

@@ -12,4 +12,13 @@ public class AnimeService {
     public Anime saveAnime(Anime anime) {
         return animeRepository.save(anime);
     }
+
+    public Anime findByTitle(String title) {
+        try {
+            return animeRepository.findBy("title", title).getFirst();
+        } catch (Exception e) {
+            System.err.println("Can't find anime with title: " + title + " \n " + e.getMessage());
+            return null;
+        }
+    }
 }

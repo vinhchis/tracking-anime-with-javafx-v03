@@ -10,9 +10,12 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -30,12 +33,10 @@ public class AnimeCard extends VBox {
     private final Label seasonNameLabel;
     private final Label seasonYearLabel;
 
-
     private final Button addBtn;
     private final Button detailBtn;
 
     private final AnimeCardDto dto;
-
 
     public AnimeCard(AnimeCardDto dto) {
         // ===== Card style =====
@@ -47,7 +48,6 @@ public class AnimeCard extends VBox {
         // assign the card class
         this.getStyleClass().add("anime-card");
         this.dto = dto;
-
 
         // ===== Image section =====
         StackPane imagePane = new StackPane();
@@ -69,14 +69,7 @@ public class AnimeCard extends VBox {
         badges.setAlignment(Pos.TOP_LEFT);
         badges.setPadding(new Insets(10));
 
-        // Button addBtnTop = new Button("+");
-        // addBtnTop.getStyleClass().add("add-top-btn");
-        // StackPane.setAlignment(addBtnTop, Pos.TOP_RIGHT);
-        // StackPane.setMargin(addBtnTop, new Insets(10));
-
-        // imagePane.getChildren().addAll(poster, badges, addBtnTop);
         imagePane.getChildren().addAll(poster, badges);
-
 
         // ===== Info section =====
         VBox infoBox = new VBox(5);
@@ -129,29 +122,44 @@ public class AnimeCard extends VBox {
     private void showDetailsDialog(AnimeCardDto dto) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Anime details");
-        alert.setHeaderText(dto.getTitle());
+        alert.setWidth(800);
+        alert.setResizable(true);
+        alert.setHeaderText(dto.getTitle() + " Details");
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("Anime ID: ").append(dto.getAnimeId()).append("\n");
-        sb.append("API ID: ").append(dto.getApiId()).append("\n\n");
-        sb.append("Title: ").append(dto.getTitle()).append("\n");
-        sb.append("Type: ").append(dto.getAnimeType()).append("\n");
-        sb.append("Status: ").append(dto.getAnimeStatus()).append("\n");
-        sb.append("Episodes: ").append(dto.getTotalEpisodes()).append("\n");
-        sb.append("Score: ").append(dto.getScore()).append("\n");
-        sb.append("Studio: ").append(dto.getStudioName()).append("\n");
-        sb.append("Season: ").append(dto.getSeasonName()).append(" ").append(dto.getSeasonYear()).append("\n");
-        sb.append("URL: ").append(dto.getUrl()).append("\n\n");
-        sb.append("Synopsis:\n").append(dto.getSynopsis());
+        GridPane grid = new GridPane();
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setMinWidth(100);
+        col1.setPrefWidth(120);
+        col1.setMaxWidth(150);
+        grid.setHgap(10);
+        grid.setVgap(5);
+        grid.setPadding(new Insets(10));
+        grid.getChildren().forEach(node -> {
+            if (node instanceof Label) {
+                ((Label) node).setWrapText(true);
+            }
+        });
 
-        TextArea area = new TextArea(sb.toString());
-        area.setEditable(false);
-        area.setWrapText(true);
-        area.setPrefWidth(480);
-        area.setPrefHeight(320);
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setHgrow(Priority.ALWAYS);
 
-        alert.getDialogPane().setExpandableContent(area);
-        alert.getDialogPane().setExpanded(true);
+        grid.getColumnConstraints().addAll(col1, col2);
+
+        grid.getColumnConstraints().addAll(col1, col2);
+
+        grid.addRow(0, new Label("Anime ID:"), new Label(String.valueOf(dto.getAnimeId())));
+        grid.addRow(1, new Label("API ID:"), new Label(String.valueOf(dto.getApiId())));
+        grid.addRow(2, new Label("Title:"), new Label(dto.getTitle()));
+        grid.addRow(3, new Label("Type:"), new Label(dto.getAnimeType()));
+        grid.addRow(4, new Label("Status:"), new Label(dto.getAnimeStatus()));
+        grid.addRow(5, new Label("Episodes:"), new Label(String.valueOf(dto.getTotalEpisodes())));
+        grid.addRow(6, new Label("Score:"), new Label(String.valueOf(dto.getScore())));
+        grid.addRow(7, new Label("Studio:"), new Label(dto.getStudioName()));
+        grid.addRow(8, new Label("Season:"), new Label(dto.getSeasonName() + " " + dto.getSeasonYear()));
+        grid.addRow(9, new Label("URL:"), new Hyperlink(dto.getUrl()));
+        grid.addRow(10, new Label("Synopsis:"), new Label(dto.getSynopsis()));
+
+        alert.getDialogPane().setContent(grid);
         alert.showAndWait();
     }
 
@@ -159,5 +167,3 @@ public class AnimeCard extends VBox {
         return addBtn;
     }
 }
-
-

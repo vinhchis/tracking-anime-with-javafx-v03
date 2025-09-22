@@ -153,10 +153,18 @@ public class DiscoverController implements Initializable {
         // tracking.setRating(Byte.valueOf("5"));
         // tracking.setNote("Enter your note here...");
 
-        Anime anime = saveDto.getAnime();
         // save file and update posterUrl
+        Anime anime = animeService.findByTitle(dto.getTitle());
+        if (anime != null) {
+            System.out.println("Add to my list: " + saveDto.getAnime().getTitle());
+            System.out.println("Anime is exists: " + saveDto.getAnime().getTitle());
+            AlertUtil.showAlert(AlertType.INFORMATION, myListBorderPane.getScene().getWindow(),
+                    "Added a anime to Your List", "Successfully added " + dto.getTitle() + " to your list.");
+            return;
+        }
+        anime = saveDto.getAnime();
         String posterUrl = saveDto.getAnime().getPosterUrl();
-        posterUrl = AssetUtil.saveImageToProject(posterUrl);
+        posterUrl = AssetUtil.saveImage(posterUrl);
         anime.setPosterUrl(posterUrl);
         // save studio, season
         if (saveDto.getStudio() != null && saveDto.getStudio().getStudioName() != null) {
@@ -164,7 +172,6 @@ public class DiscoverController implements Initializable {
             if (studio == null) {
                 studio = studioService.saveStudio(saveDto.getStudio());
             }
-
             anime.setStudio(studio);
         }
 
@@ -180,7 +187,6 @@ public class DiscoverController implements Initializable {
         }
 
         anime = animeService.saveAnime(anime);
-        // save anime
         tracking.setAnime(animeService.saveAnime(anime));
 
         // save tracking

@@ -31,23 +31,8 @@ public class AssetUtil {
         }
     }
 
-    // /resource/images/<name>
-    // public static Image getImage(String path) {
-    // try {
-    // InputStream imageStream = Main.class.getResourceAsStream("/images/" + path);
-    // if (imageStream == null) {
-    // System.err.println("Can't find image from : " + path);
-    // return null;
-    // }
-    // return new Image(imageStream);
 
-    // } catch (Exception e) {
-    // System.err.println("Can't load image: " + path);
-    // e.printStackTrace();
-    // return null;
-    // }
-    // }
-
+    // ---------IMAGE ----------///
     // get image from images folder of project (on project/images/<filename> folder)
     public static Image getImageFromProject(String filename) {
         if (filename == null || filename.isBlank()) {
@@ -58,7 +43,8 @@ public class AssetUtil {
             if (Files.exists(imagePath)) {
                 return new Image(imagePath.toUri().toString());
             } else {
-                // fallback to resource images
+                // fallback to resource image
+                return getFallbackImage();
             }
         } catch (Exception e) {
             System.err.println("Can't get file: " + e.getMessage());
@@ -72,6 +58,7 @@ public class AssetUtil {
         return Objects.requireNonNull(Main.class.getResource(pathName)).toExternalForm();
     }
 
+    // ---------IMAGE ----------///
     // "https://cdn.myanimelist.net/images/anime/1015/138006.jpg"
     public static Image getImageFromLink(String posterUrl) {
         try {
@@ -83,20 +70,30 @@ public class AssetUtil {
         }
     }
 
-    // save image from link to images folder
-    // root/images/<filename>
-    //  posterUrl = "https://cdn.myanimelist.net/images/anime/1015/138006.jpg"
-    public static String saveImageToProject(String fileURL) {
-        if(fileURL == null || fileURL.isBlank()) {
+    // $HOME/.tracking-anime/images/<filename>
+    // posterUrl = "https://cdn.myanimelist.net/images/anime/1015/138006.jpg"
+    public static String saveImage(String fileURL) {
+        if (fileURL == null || fileURL.isBlank()) {
             return null;
         }
         String filename = fileURL.substring(fileURL.lastIndexOf('/') + 1);
-        if(filename.isBlank()) {
+        if (filename.isBlank()) {
             return null;
         }
 
-        Path savePath = Paths.get(System.getProperty("user.dir"), "images", filename); // root/images/<filename>
+        Path storageImage = Paths.get(System.getProperty("user.home"), ".tracking-anime", "images");
+        if(!Files.exists(storageImage)) {
+            try {
+                Files.createDirectories(storageImage);
+                System.out.println("Created directory: " + storageImage);
+            } catch (IOException e) {
+                System.err.println("Failed to create directory: " + e.getMessage());
+                e.printStackTrace();
+                return null;
+            }
+        }
 
+        Path savePath = storageImage.resolve(filename);
         try {
             URL url = new URL(fileURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -117,5 +114,53 @@ public class AssetUtil {
         }
 
         return filename;
+    }
+
+    public static void deleteImage(String imagePath) {
+        if (imagePath == null || imagePath.isBlank()) {
+            return;
+        }
+        try {
+            Path targetPath = Paths.get(System.getProperty("user.home"), ".tracking-anime", "images", imagePath);
+            if (Files.exists(targetPath)) {
+                Files.delete(targetPath);
+                System.out.println("Image deleted successfully: " + targetPath);
+            } else {
+                System.out.println("Image not found, cannot delete: " + targetPath);
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to delete image: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // IMAGE FROM LOCAL PATH // $HOME.tracking-animes/images/filename.png
+    public static Image getImageFromLocal(String postUrl) {
+        if (postUrl == null || postUrl.isBlank()) {
+            return getFallbackImage();
+        }
+        try {
+            Path storageImage = Paths.get(System.getProperty("user.home"), ".tracking-anime", "images");
+            Path imagePath = storageImage.resolve(postUrl);
+            if (Files.exists(imagePath)) {
+                return new Image(imagePath.toUri().toString());
+            } else {
+                System.out.println("Image not found in local path: " + imagePath);
+                return getFallbackImage();
+            }
+        } catch (Exception e) {
+            System.err.println("Can't get file: " + postUrl + "\n" + e.getMessage());
+            e.printStackTrace();
+        }
+        return getFallbackImage();
+    }
+
+
+    public static Image getFallbackImage() {
+        Path imagePath = Paths.get(System.getProperty("user.dir"), "images", "placeholder_300x250.png");
+        if (Files.exists(imagePath)) {
+            return new Image(imagePath.toUri().toString());
+        }
+        return null;
     }
 }

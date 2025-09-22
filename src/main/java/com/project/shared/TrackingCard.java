@@ -89,7 +89,9 @@ public class TrackingCard extends VBox implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load TrackingCard FXML", e);
         }
+        // apply stylesheet and style class so CSS rules take effect
         this.getStylesheets().add(AssetUtil.getCss("tracking-card.css"));
+        this.getStyleClass().add("tracking-card");
     }
 
     @Override

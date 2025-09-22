@@ -28,4 +28,27 @@ public class AlertUtil {
                     .showError();
         }
     }
+
+    public static boolean showConfirmationAlert(Alert.AlertType alertType, Window owner, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.initOwner(owner);
+
+        alert.showAndWait().ifPresent(response -> {
+            switch (response.getButtonData()) {
+                case OK_DONE:
+                    result = true;
+                    break;
+                case CANCEL_CLOSE:
+                    result = false;
+                    break;
+                default:
+                    result = false;
+                    break;
+            }
+        });
+        return result;
+    }
 }

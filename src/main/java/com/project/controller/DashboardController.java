@@ -39,6 +39,10 @@ public class DashboardController implements Initializable {
         viewModel = new DashboardViewModel();
         navButtons = List.of(overViewButton, discoverButton, myListButton);
 
+        navButtons.forEach(button -> {
+            button.getStyleClass().add("tab-button");
+        });
+
         navButtons.forEach(button -> button.setOnAction((event) -> {
             handleNavButtonClick(event);
         }));
@@ -46,7 +50,9 @@ public class DashboardController implements Initializable {
         notiToggleButton.setOnAction(this::handleNotiToggle);
 
         // Load default view
-        Parent root = AssetUtil.loadFXML(View.DISCOVER.getFxmlFile());
+        Parent root = AssetUtil.loadFXML(View.MY_LIST.getFxmlFile());
+        // set active class correctly (only the 'active' class, tab-button already present)
+        myListButton.getStyleClass().add("active");
         mainBorderPane.setCenter(root);
 
     }
@@ -71,6 +77,12 @@ public class DashboardController implements Initializable {
             default:
                 break;
         }
+        // add only the 'active' class
+        clickedButton.getStyleClass().add("active");
+        // remove 'active' from others
+        navButtons.stream().filter(btn -> btn != clickedButton).forEach(btn -> {
+            btn.getStyleClass().remove("active");
+        });
         mainBorderPane.setCenter(root);
         AlertUtil.showAlert(AlertType.INFORMATION, mainBorderPane.getScene().getWindow(),
                 "Navigate to " + clickedButton.getText(), "You just clicked " + clickedButton.getText() + " button.");

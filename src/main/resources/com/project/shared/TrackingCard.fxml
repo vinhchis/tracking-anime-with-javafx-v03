@@ -17,25 +17,32 @@
 <?import javafx.scene.text.Text?>
 <?import org.controlsfx.control.Rating?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="346.0" spacing="10.0" stylesheets="@../css/tracking-card.css" type="VBox" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="346.0" spacing="10.0" stylesheets="@../css/tracking-card.css" type="VBox" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <StackPane alignment="TOP_RIGHT" VBox.vgrow="ALWAYS">
+      <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <ImageView fx:id="posterImageView" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/animes/a1.png" />
-               </image>
-            </ImageView>
-            <Button fx:id="deleteButton" alignment="CENTER" mnemonicParsing="false">
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+            <Region prefHeight="200.0" prefWidth="200.0" />
+            <StackPane alignment="TOP_RIGHT">
+               <children>
+                  <ImageView fx:id="posterImageView" fitHeight="318.0" fitWidth="225.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/icons/icons8-remove-48.png" />
+                        <Image url="@../images/animes/a1.png" />
                      </image>
                   </ImageView>
-               </graphic></Button>
+                  <Button fx:id="deleteButton" alignment="CENTER" mnemonicParsing="false">
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons/icons8-remove-48.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </StackPane>
+            <Region prefHeight="200.0" prefWidth="200.0" />
          </children>
-      </StackPane>
+      </HBox>
       <Label fx:id="titleLabel" text="One Piece" underline="true" wrapText="true">
          <font>
             <Font size="24.0" />
@@ -53,11 +60,6 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="studioLabel" text="Mappa">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
             <Label fx:id="animeTypeLabel" text="TV">
                <font>
                   <Font size="16.0" />
@@ -65,16 +67,25 @@
             </Label>
          </children>
       </HBox>
-      <Label fx:id="animeStatusLabel" text="On Going" textAlignment="CENTER" textFill="RED" wrapText="true">
-         <font>
-            <Font name="System Bold Italic" size="16.0" />
-         </font>
-      </Label>
-      <HBox prefWidth="200.0" spacing="40.0">
+      <HBox spacing="20.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Episode:">
+            <Label fx:id="animeStatusLabel" text="On Going" textAlignment="CENTER" textFill="RED" wrapText="true">
+               <font>
+                  <Font name="System Bold Italic" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="studioLabel" text="Mappa">
                <font>
                   <Font size="16.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox prefWidth="200.0" spacing="40.0">
+         <children>
+            <Text fill="#2618b8" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Episode:">
+               <font>
+                  <Font name="System Bold Italic" size="20.0" />
                </font>
             </Text>
             <Label fx:id="totalEpisodesLabel" text="50">
@@ -86,9 +97,9 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="21.0" prefWidth="405.0">
          <children>
-            <Label fx:id="episodeProgressLabel" prefHeight="26.0" prefWidth="119.0" text="Episode 40/50" wrapText="true">
+            <Label fx:id="episodeProgressLabel" prefHeight="35.0" prefWidth="244.0" text="Episode 40/50" wrapText="true">
                <font>
-                  <Font size="16.0" />
+                  <Font name="System Bold" size="24.0" />
                </font>
             </Label>
             <Region prefHeight="32.0" prefWidth="131.0" />
@@ -111,14 +122,17 @@
       <ProgressBar fx:id="progressBar" prefHeight="20.0" prefWidth="414.0" progress="0.0" />
       <VBox fx:id="scheduleBox" prefWidth="100.0" spacing="5.0">
          <children>
-            <Label text="Schedule :" />
+            <Label text="Schedule :" wrapText="true">
+               <font>
+                  <Font name="System Bold Italic" size="16.0" />
+               </font></Label>
             <ComboBox fx:id="scheduleDayComboBox" prefWidth="150.0" promptText="Day:" />
          </children>
       </VBox>
       <Rating fx:id="rating" />
       <ComboBox fx:id="trackingStatusComboBox" prefHeight="26.0" prefWidth="196.0" promptText="Status" />
       <ToggleButton fx:id="noteToggleButton" mnemonicParsing="false" text="View Notes" />
-      <TextArea fx:id="noteTextArea" prefHeight="20.0" prefWidth="326.0" promptText="Enter your notes" />
+      <TextArea fx:id="noteTextArea" prefHeight="20.0" prefWidth="326.0" promptText="Enter your notes" visible="false" wrapText="true" />
    </children>
    <padding>
       <Insets bottom="20.0" left="10.0" right="10.0" />

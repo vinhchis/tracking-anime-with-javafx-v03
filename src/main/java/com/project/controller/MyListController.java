@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import com.project.dto.TrackingDto;
 import com.project.shared.TrackingCard;
+import com.project.util.AlertUtil;
 import com.project.util.SaveRegistry;
 import com.project.util.Saveable;
 import com.project.viewmodel.MyListViewModel;
@@ -12,8 +13,11 @@ import com.project.viewmodel.MyListViewModel;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 
@@ -29,13 +33,17 @@ public class MyListController implements Initializable, Saveable {
 
     @FXML
     private FlowPane trackingFlowPane;
-
+    @FXML
+    private Tooltip warningTooltip;
     private MyListViewModel viewModel;
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         viewModel = new MyListViewModel();
         SaveRegistry.register(this);
+
+        warningTooltip.setText("- Your tracking anime only saved when you move to another tabs or quit app." +
+            "\n - When \"My List\" selected again , your tracking was reset on last time you in there.");
 
         filterStatusComboBox.getItems().addAll("All", "Watching", "Completed", "On Hold", "Dropped", "Plan to Watch");
 
@@ -67,7 +75,18 @@ public class MyListController implements Initializable, Saveable {
 
         card.getDeleteButton().setOnAction(e -> {
             viewModel.deleteTrackingById(dto.getTrackingId());
-            trackingFlowPane.getChildren().remove(card);
+           boolean isRemove = AlertUtil.showConfirmationAlert(
+                Alert.AlertType.CONFIRMATION,
+                myListBorderPane.getScene().getWindow(),
+                "Delete Confirmation",
+                "Are you sure you want to delete this tracking?"
+            );
+           if (isRemove) {
+               trackingFlowPane.getChildren().remove(card);
+               AlertUtil.showAlert(AlertType.INFORMATION, myListBorderPane.getScene().getWindow(),
+                       "Deleted", "Tracking deleted successfully.");
+           }
+
         });
 
         card.getTrackingStatusComboBox().setOnAction(e -> {

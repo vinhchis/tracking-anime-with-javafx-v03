@@ -132,6 +132,8 @@ public class DiscoverController implements Initializable {
 
     public void addToMyList(AnimeCardDto dto) {
         DataSaveDto saveDto = apiService.mapToDataSave(dto);
+        Tracking tracking = new Tracking();
+        // setting default tracking values - to be made in TrackingDto setter
 
         // check if anime already in tracking
         if (trackingService.checkExistedAnimeOfTracking(dto.getTitle())) {
@@ -144,52 +146,43 @@ public class DiscoverController implements Initializable {
             return;
         }
 
-        Tracking tracking = new Tracking();
-        // setting default tracking values // to be made in TrackingDto setter
-        // tracking.setTrackingStatus(Tracking.TRACKINGS_STATUS.WATCHING);
-        // tracking.setLastWatchedEpisode((short) 0);
-        // tracking.setScheduleDay(Tracking.DAY_OF_WEEK.SUNDAY);
-        // tracking.setScheduleTime(LocalTime.of(20, 0)); // default 8 PM
-        // tracking.setRating(Byte.valueOf("5"));
-        // tracking.setNote("Enter your note here...");
-
         // save file and update posterUrl
         Anime anime = animeService.findByTitle(dto.getTitle());
         if (anime != null) {
-            System.out.println("Add to my list: " + saveDto.getAnime().getTitle());
-            System.out.println("Anime is exists: " + saveDto.getAnime().getTitle());
-            AlertUtil.showAlert(AlertType.INFORMATION, myListBorderPane.getScene().getWindow(),
-                    "Added a anime to Your List", "Successfully added " + dto.getTitle() + " to your list.");
-            return;
-        }
-        anime = saveDto.getAnime();
-        String posterUrl = saveDto.getAnime().getPosterUrl();
-        posterUrl = AssetUtil.saveImage(posterUrl);
-        anime.setPosterUrl(posterUrl);
-        // save studio, season
-        if (saveDto.getStudio() != null && saveDto.getStudio().getStudioName() != null) {
-            Studio studio = studioService.getStudioByName(saveDto.getStudio().getStudioName());
-            if (studio == null) {
-                studio = studioService.saveStudio(saveDto.getStudio());
-            }
-            anime.setStudio(studio);
-        }
+            tracking.setAnime(animeService.saveAnime(anime));
+            System.out.println("Anime already in database: " + dto.getTitle());
+        } else {
+            // update poster url to local file path
+            anime = saveDto.getAnime();
+            String posterUrl = saveDto.getAnime().getPosterUrl();
+            posterUrl = AssetUtil.saveImage(posterUrl);
+            anime.setPosterUrl(posterUrl);
 
-        // add anime
-        if (saveDto.getSeason() != null && saveDto.getSeason().getSeasonName() != null
-                && saveDto.getSeason().getSeasonYear() != null) {
-            Season season = seasonService.getSeasonByName(saveDto.getSeason().getSeasonName(),
-                    saveDto.getSeason().getSeasonYear());
-            if (season == null) {
-                season = seasonService.saveSeason(saveDto.getSeason());
+            // save studio, season
+            if (saveDto.getStudio() != null && saveDto.getStudio().getStudioName() != null) {
+                Studio studio = studioService.getStudioByName(saveDto.getStudio().getStudioName());
+                if (studio == null) {
+                    studio = studioService.saveStudio(saveDto.getStudio());
+                }
+                anime.setStudio(studio);
             }
-            anime.setSeason(season);
-        }
 
-        anime = animeService.saveAnime(anime);
-        tracking.setAnime(animeService.saveAnime(anime));
+            // add anime
+            if (saveDto.getSeason() != null && saveDto.getSeason().getSeasonName() != null
+                    && saveDto.getSeason().getSeasonYear() != null) {
+                Season season = seasonService.getSeasonByName(saveDto.getSeason().getSeasonName(),
+                        saveDto.getSeason().getSeasonYear());
+                if (season == null) {
+                    season = seasonService.saveSeason(saveDto.getSeason());
+                }
+                anime.setSeason(season);
+            }
+
+            anime = animeService.saveAnime(anime);
+        }
 
         // save tracking
+        tracking.setAnime(anime);
         trackingService.saveTracking(tracking);
 
         System.out.println("Add to my list: " + saveDto.getAnime().getTitle());

@@ -43,7 +43,7 @@ public class MyListController implements Initializable, Saveable {
         SaveRegistry.register(this);
 
         warningTooltip.setText("- Your tracking anime only saved when you move to another tabs or quit app." +
-            "\n - When \"My List\" selected again , your tracking was reset on last time you in there.");
+                "\n - When \"My List\" selected again , your tracking was reset on last time you in there.");
 
         filterStatusComboBox.getItems().addAll("All", "Watching", "Completed", "On Hold", "Dropped", "Plan to Watch");
 
@@ -75,17 +75,16 @@ public class MyListController implements Initializable, Saveable {
 
         card.getDeleteButton().setOnAction(e -> {
             viewModel.deleteTrackingById(dto.getTrackingId());
-           boolean isRemove = AlertUtil.showConfirmationAlert(
-                Alert.AlertType.CONFIRMATION,
-                myListBorderPane.getScene().getWindow(),
-                "Delete Confirmation",
-                "Are you sure you want to delete this tracking?"
-            );
-           if (isRemove) {
-               trackingFlowPane.getChildren().remove(card);
-               AlertUtil.showAlert(AlertType.INFORMATION, myListBorderPane.getScene().getWindow(),
-                       "Deleted", "Tracking deleted successfully.");
-           }
+            boolean isRemove = AlertUtil.showConfirmationAlert(
+                    Alert.AlertType.CONFIRMATION,
+                    myListBorderPane.getScene().getWindow(),
+                    "Delete Confirmation",
+                    "Are you sure you want to delete this tracking?");
+            if (isRemove) {
+                trackingFlowPane.getChildren().remove(card);
+                AlertUtil.showAlert(AlertType.INFORMATION, myListBorderPane.getScene().getWindow(),
+                        "Deleted", "Tracking deleted successfully.");
+            }
 
         });
 
@@ -121,8 +120,6 @@ public class MyListController implements Initializable, Saveable {
         card.getTimePicker().valueProperty().addListener((obs, oldVal, newVal) -> {
             viewModel.updateTrackingCardInfo(card);
         });
-
-
 
         return card;
     }

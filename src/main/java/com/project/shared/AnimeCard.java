@@ -4,6 +4,8 @@ import com.project.dto.AnimeCardDto;
 import com.project.util.AssetUtil;
 import com.project.util.HoverAnimation;
 
+import java.net.URL;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -24,8 +26,6 @@ public class AnimeCard extends VBox {
     private final Label epsLabel;
     private final Label scoreLabel;
 
-
-
     private final Label studioLabel;
     private final Label seasonNameLabel;
     private final Label seasonYearLabel;
@@ -40,8 +40,12 @@ public class AnimeCard extends VBox {
     public AnimeCard(AnimeCardDto dto) {
         // ===== Card style =====
         this.setPrefWidth(250);
-        // load stylesheet (safe)
-        this.getStyleClass().add(AssetUtil.getCss("anime-card.css"));
+        URL cssUrl = getClass().getResource("/com/project/css/anime-card.css");
+        if (cssUrl != null) {
+            this.getStylesheets().add(cssUrl.toExternalForm());
+        }
+        // assign the card class
+        this.getStyleClass().add("anime-card");
         this.dto = dto;
 
 
@@ -56,7 +60,6 @@ public class AnimeCard extends VBox {
 
         // Badges
         typeLabel = new Label(dto.getAnimeStatus());
-        // use CSS class instead of inline style
         typeLabel.getStyleClass().add("badge");
 
         statusLabel = new Label(dto.getAnimeType());
@@ -66,41 +69,45 @@ public class AnimeCard extends VBox {
         badges.setAlignment(Pos.TOP_LEFT);
         badges.setPadding(new Insets(10));
 
-        Button addBtnTop = new Button("+");
-        // replace inline style with class
-        addBtnTop.getStyleClass().add("add-top-btn");
-        StackPane.setAlignment(addBtnTop, Pos.TOP_RIGHT);
-        StackPane.setMargin(addBtnTop, new Insets(10));
+        // Button addBtnTop = new Button("+");
+        // addBtnTop.getStyleClass().add("add-top-btn");
+        // StackPane.setAlignment(addBtnTop, Pos.TOP_RIGHT);
+        // StackPane.setMargin(addBtnTop, new Insets(10));
 
-        imagePane.getChildren().addAll(poster, badges, addBtnTop);
+        // imagePane.getChildren().addAll(poster, badges, addBtnTop);
+        imagePane.getChildren().addAll(poster, badges);
+
 
         // ===== Info section =====
         VBox infoBox = new VBox(5);
         infoBox.setPadding(new Insets(10));
 
         titleLabel = new Label(dto.getTitle());
-        // use CSS class for title
         titleLabel.getStyleClass().add("title");
 
-        studioLabel = new Label("🎬 " + dto.getStudioName());
-        seasonNameLabel = new Label("🍂 " + dto.getSeasonName());
-        seasonYearLabel = new Label("📅 " + (dto.getSeasonYear() != null ? dto.getSeasonYear().toString() : ""));
+        studioLabel = new Label("🎬 " + (dto.getStudioName() != null ? dto.getStudioName() : "N/A"));
+        studioLabel.getStyleClass().add("studio-label");
+
+        seasonNameLabel = new Label("🍂 " + (dto.getSeasonName() != null ? dto.getSeasonName() : "N/A"));
+        seasonNameLabel.getStyleClass().add("season-name-label");
+
+        seasonYearLabel = new Label("📅 " + (dto.getSeasonYear() != null ? dto.getSeasonYear().toString() : "N/A"));
+        seasonYearLabel.getStyleClass().add("season-year-label");
 
         scoreLabel = new Label("⭐ " + (dto.getScore() != null ? dto.getScore().toString() : "N/A"));
         scoreLabel.getStyleClass().add("score");
-        epsLabel = new Label((dto.getTotalEpisodes() != null ? dto.getTotalEpisodes() : 0) + " eps");
-        // use CSS class for emphasis
+
+        epsLabel = new Label("📺 " + (dto.getTotalEpisodes() != null ? dto.getTotalEpisodes() : "N/A") + " eps");
         epsLabel.getStyleClass().add("eps");
 
         infoBox.getChildren().addAll(titleLabel, studioLabel, seasonNameLabel, seasonYearLabel, scoreLabel, epsLabel);
 
         // ===== Add + Details buttons bottom =====
-        addBtn = new Button("+ Add");
+        addBtn = new Button("➕ Add to My List");
         addBtn.setMaxWidth(Double.MAX_VALUE);
-        // use CSS class instead of inline style
         addBtn.getStyleClass().add("add-btn");
 
-        detailBtn = new Button("Details");
+        detailBtn = new Button("ⓘ");
         detailBtn.getStyleClass().add("detail-btn");
 
         // layout: addBtn grows to take available space
@@ -116,7 +123,7 @@ public class AnimeCard extends VBox {
         detailBtn.setOnAction(evt -> showDetailsDialog(this.dto));
 
         // Animation
-        HoverAnimation.install(this);
+        // HoverAnimation.install(this);
     }
 
     private void showDetailsDialog(AnimeCardDto dto) {

@@ -98,8 +98,8 @@ public class TrackingCard extends VBox implements Initializable {
 
         trackingStatusComboBox.getItems().setAll(TRACKINGS_STATUS.values());
         scheduleDayComboBox.getItems().setAll(Tracking.DAY_OF_WEEK.values());
-
         trackingStatusComboBox.setValue(TRACKINGS_STATUS.WATCHING);
+        noteTextArea.setVisible(false);
 
         noteToggleButton.setOnAction(e -> {
             noteTextArea.setVisible(noteToggleButton.isSelected());
@@ -109,18 +109,13 @@ public class TrackingCard extends VBox implements Initializable {
     public void setData(TrackingDto trackingDto) {
         this.dto = trackingDto;
 
-        // Set tracking info
+        // Set tracking
+        // don't check null because it's already handled in dto
         rating.setRating(dto.getRating());
         trackingStatusComboBox.setValue(dto.getTrackingStatus());
         scheduleDayComboBox.setValue(dto.getScheduleDay());
         timePicker.setValue(dto.getScheduleLocalTime());
-        if (dto.getScheduleLocalTime() != null) {
-           timePicker.setValue(dto.getScheduleLocalTime());
-        } else {
-              timePicker.setValue(LocalTime.of(19, 30)); // default 7:30 PM
-        }
         noteTextArea.setText(dto.getNote());
-
         // Set progress
         short totalEpisodes = dto.getTotalEpisodes() != null ? dto.getTotalEpisodes() : 0;
         short lastWatched = dto.getLastWatchedEpisode() != null ? dto.getLastWatchedEpisode() : 0;
@@ -136,16 +131,16 @@ public class TrackingCard extends VBox implements Initializable {
         titleLabel.setText(dto.getAnimeTitle());
         Image posterImage = AssetUtil.getImageFromProject(dto.getImageUrl());
         posterImageView.setImage(posterImage);
-        animeTypeLabel.setText(dto.getAnimeType().toString());
-        animeStatusLabel.setText(dto.getAnimeStatus().toString());
-        totalEpisodesLabel.setText(String.valueOf(dto.getTotalEpisodes() != null ? dto.getTotalEpisodes() : "Unknown"));
+        animeTypeLabel.setText(dto.getAnimeType() != null ? dto.getAnimeType().toString() : "N/A");
+        animeStatusLabel.setText(dto.getAnimeStatus() != null ? dto.getAnimeStatus().toString() : "N/A");
+        totalEpisodesLabel.setText(String.valueOf(dto.getTotalEpisodes() != null ? dto.getTotalEpisodes() : "N/A"));
 
         // season
-        seasonNameLabel.setText(dto.getSeasonName() != null ? dto.getSeasonName() : "Unknown");
+        seasonNameLabel.setText(dto.getSeasonName() != null ? dto.getSeasonName().toString().toLowerCase() : "N/A");
         seasonYearLabel
-                .setText(String.valueOf(dto.getSeasonYear()) != null ? String.valueOf(dto.getSeasonYear()) : "Unknown");
+                .setText(dto.getSeasonYear() != null ? String.valueOf(dto.getSeasonYear())  : "N/A");
         // studio
-        studioLabel.setText(dto.getStudioName());
+        studioLabel.setText(dto.getStudioName() != null ? dto.getStudioName() : "N/A");
     }
 
     public void increaseEpisode() {

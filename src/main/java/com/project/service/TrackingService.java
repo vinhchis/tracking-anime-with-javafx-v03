@@ -56,14 +56,14 @@ public class TrackingService {
             dto.setAnimeStatus(tracking.getAnime().getAnimeStatus());
             dto.setAnimeType(tracking.getAnime().getAnimeType());
             dto.setImageUrl(tracking.getAnime().getPosterUrl());
-            dto.setTotalEpisodes(tracking.getAnime().getTotalEpisodes());
+            dto.setTotalEpisodes(tracking.getAnime().getTotalEpisodes() != null ? tracking.getAnime().getTotalEpisodes() : 0);
              // studio
             if (tracking.getAnime().getStudio() != null) {
                 dto.setStudioName(tracking.getAnime().getStudio().getStudioName());
             }
             // season
             if (tracking.getAnime().getSeason() != null) {
-                dto.setSeasonName(tracking.getAnime().getSeason().getSeasonName().toString());
+                dto.setSeasonName(tracking.getAnime().getSeason().getSeasonName());
                 dto.setSeasonYear(tracking.getAnime().getSeason().getSeasonYear());
             }
         }
@@ -81,6 +81,13 @@ public class TrackingService {
             tracking.setRating(dto.getRating());
             tracking.setNote(dto.getNote());
             return tracking;
+    }
+
+    public boolean checkExistedAnimeOfTracking(String title) {
+        boolean isExisted = trackingRepository.getTrackingFullInfo().stream()
+                .filter(t -> t.getAnime() != null && t.getAnime().getTitle().equalsIgnoreCase(title))
+                .findFirst().isPresent();
+       return isExisted;
     }
 
 }

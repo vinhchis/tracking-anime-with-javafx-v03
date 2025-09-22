@@ -16,6 +16,7 @@ import com.project.dto.JikanSearchResponse;
 import com.project.entity.Anime;
 import com.project.entity.Season;
 import com.project.entity.Studio;
+import com.project.entity.Tracking;
 import com.project.entity.Season.SEASON_NAME;
 import com.project.util.MapperUtil;
 
@@ -110,6 +111,7 @@ public class ApiService {
         anime.setTitle(dto.getTitle());
         anime.setPosterUrl(dto.getPosterUrl());
         anime.setIntroduction(dto.getSynopsis());
+        anime.setTotalEpisodes(dto.getTotalEpisodes());
        if (dto.getAnimeStatus() != null) {
             switch (dto.getAnimeStatus().toLowerCase()) {
                 case "finished airing":
@@ -177,15 +179,17 @@ public class ApiService {
         return dataSaveDto;
     }
 
+
     public AnimeCardDto mapToAnimeCardDto(AnimeData dto) {
         AnimeCardDto animeCardDto = new AnimeCardDto();
+
         animeCardDto.setApiId(Integer.valueOf(dto.getMal_id()));
         animeCardDto.setTitle(dto.getTitle());
         animeCardDto.setSynopsis(dto.getSynopsis());
         animeCardDto.setScore(dto.getScore());
         animeCardDto.setUrl(dto.getUrl());
         animeCardDto.setPosterUrl(dto.getImages().getJpg().getImage_url());
-        animeCardDto.setTotalEpisodes(dto.getEpisodes() != null ? dto.getEpisodes().shortValue() : null);
+        animeCardDto.setTotalEpisodes(dto.getEpisodes() != null ? Short.valueOf(dto.getEpisodes().toString()) : null);
 
         animeCardDto.setAnimeStatus(dto.getStatus());
         animeCardDto.setAnimeType(dto.getType());

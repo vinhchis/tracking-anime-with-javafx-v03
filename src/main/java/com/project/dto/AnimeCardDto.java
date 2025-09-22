@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnimeCardDto {
-    private Long animeId;
+    private Long animeId; // can be null for new anime
     private Integer apiId;
     private String title;
     private String synopsis;
@@ -21,8 +21,8 @@ public class AnimeCardDto {
     private Short totalEpisodes;
     private Double score;
 
-    private String studioName;
+    private String studioName; // can be null
 
-    private String seasonName;
-    private Short seasonYear;
+    private String seasonName; // can be null
+    private Short seasonYear; // can be null
 }

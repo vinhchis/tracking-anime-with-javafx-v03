@@ -1,6 +1,5 @@
 package com.project.viewmodel;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,38 +9,57 @@ import com.project.entity.Tracking.TRACKINGS_STATUS;
 import com.project.service.TrackingService;
 import com.project.shared.TrackingCard;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 
 public class MyListViewModel {
     private ObservableList<TrackingDto> trackingList = FXCollections.observableArrayList();
-    private ObservableList<TrackingDto> filteredList = FXCollections.observableArrayList();
-    private StringProperty filterStatus = new SimpleStringProperty("All");
+    private FilteredList<TrackingDto> filteredList;
+    private StringProperty filterStatus = new SimpleStringProperty("");
+    private StringProperty searchText = new SimpleStringProperty("");
+    private IntegerProperty totalAnimeWithStatus = new SimpleIntegerProperty(0);
+    public IntegerProperty getTotalAnimeWithStatus() {
+        return totalAnimeWithStatus;
+    }
+
+    public StringProperty getSearchText() {
+        return searchText;
+    }
+
     private List<Long> deletedList = new ArrayList<>();
     private final TrackingService trackingService;
+
     public MyListViewModel() {
         trackingService = new TrackingService();
         // load data from database
         trackingList.setAll(trackingService.getTrackingDtos());
-        filteredList.setAll(getTrackingListByStatus(filterStatus.get()));
-
+        filteredList = new FilteredList<>(trackingList, p -> true);
         // event
-        filterStatus.addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) {
-                filteredList.setAll(getTrackingListByStatus(newVal));
+        filterStatus.addListener((obs, oldStatus, newStatus) -> {
+            if (newStatus != null) {
+                System.out.println("Filter changed to: " + newStatus);
+                updateFilteredList();
+                totalAnimeWithStatus.set(filteredList.size());
+            }
+        });
+
+        searchText.addListener((obs, oldText, newText) -> {
+            if (newText != null) {
+                updateFilteredList();
             }
         });
     }
 
-    public ObservableList<TrackingDto> getTrackingListByStatus(String status) {
-        if (status.equals("All")) {
-            return trackingList;
-        }
+    private void updateFilteredList() {
+        String status = filterStatus.get();
+        String search = searchText.get().toLowerCase().trim();
 
-        ObservableList<TrackingDto> filteredList = FXCollections.observableArrayList();
-        Tracking.TRACKINGS_STATUS enumStatus = null;
+        final Tracking.TRACKINGS_STATUS enumStatus;
         switch (status) {
             case "Watching":
                 enumStatus = TRACKINGS_STATUS.WATCHING;
@@ -59,17 +77,20 @@ public class MyListViewModel {
                 enumStatus = TRACKINGS_STATUS.PLAN_TO_WATCH;
                 break;
             default:
+                enumStatus = null;
                 break;
         }
 
-        for (TrackingDto dto : trackingList) {
-            if (dto.getTrackingStatus().equals(enumStatus)) {
-                filteredList.add(dto);
-            }
-        }
+        filteredList.setPredicate(dto ->
+        {
+            boolean statusMatches = status.equals("All") || dto.getTrackingStatus().equals(enumStatus);
+            boolean searchMatches = search.isEmpty() || dto.getAnimeTitle().toLowerCase().contains(search) ||
+                    (dto.getStudioName() != null && dto.getStudioName().toLowerCase().contains(search));
+            return statusMatches && searchMatches;
+        });
 
-        return filteredList;
     }
+
 
     public void save() {
         trackingService.saveAll(trackingList);
@@ -93,13 +114,10 @@ public class MyListViewModel {
                 break;
             }
         }
-
-        filteredList.setAll(getTrackingListByStatus(filterStatus.get()));
     }
 
     // Getters and Setters
-
-     public ObservableList<TrackingDto> getFilteredList() {
+    public ObservableList<TrackingDto> getFilteredList() {
         return filteredList;
     }
 

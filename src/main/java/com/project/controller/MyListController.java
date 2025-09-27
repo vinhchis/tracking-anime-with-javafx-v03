@@ -11,15 +11,20 @@ import com.project.util.Saveable;
 import com.project.viewmodel.MyListViewModel;
 
 import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.application.Platform;
 
 public class MyListController implements Initializable, Saveable {
     @FXML
@@ -32,10 +37,17 @@ public class MyListController implements Initializable, Saveable {
     private Label totalAnimeLabel;
 
     @FXML
+    private TextField searchField;
+
+    @FXML
+    private Label filterLabel;
+
+    @FXML
     private FlowPane trackingFlowPane;
     @FXML
     private Tooltip warningTooltip;
     private MyListViewModel viewModel;
+    private ObservableList<TrackingCard> cardList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -49,16 +61,33 @@ public class MyListController implements Initializable, Saveable {
 
         // default View
         filterStatusComboBox.setValue("All");
-        refreshList();
+        // for(TrackingDto dto : viewModel.getFilteredList()) {
+        // TrackingCard card = createCard(dto);
+        // cardList.add(card);
+        // }
+        // trackingFlowPane.getChildren().setAll(cardList);
+        // refreshList();
 
         // binding
-        filterStatusComboBox.valueProperty().bindBidirectional(viewModel.filterStatusProperty());
-        totalAnimeLabel.textProperty().bind(Bindings.size(viewModel.getFilteredList()).asString());
-
-        // event
-        filterStatusComboBox.setOnAction(event -> {
-            refreshList();
+        viewModel.getFilteredList().addListener((ListChangeListener<TrackingDto>) change -> {
+            Platform.runLater(() -> {
+                trackingFlowPane.getChildren().clear();
+                cardList.clear();
+                for (TrackingDto dto : viewModel.getFilteredList()) {
+                    TrackingCard card = createCard(dto);
+                    cardList.add(card);
+                }
+                trackingFlowPane.getChildren().setAll(cardList);
+            });
         });
+
+        viewModel.filterStatusProperty().bind(filterStatusComboBox.valueProperty());
+        totalAnimeLabel.textProperty().bind(viewModel.getTotalAnimeWithStatus().asString());
+        filterLabel.textProperty().bind(Bindings.createStringBinding(() -> {
+            int total = viewModel.getFilteredList().size();
+            return "Filter " + (total > 0 ? "(" + total + ")" : "0");
+        }, viewModel.getFilteredList()));
+        viewModel.getSearchText().bind(searchField.textProperty());
 
     }
 

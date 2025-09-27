@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="myListBorderPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.controller.MyListController">
+<BorderPane fx:id="myListBorderPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="1200.0" stylesheets="@../css/my-list.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.controller.MyListController">
    <top>
       <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
@@ -27,7 +27,7 @@
                </font>
             </Text>
             <ComboBox fx:id="filterStatusComboBox" prefHeight="43.0" prefWidth="210.0" promptText="Select a status" style="-fx-background-color: white; -fx-font-size: 20px;" />
-            <Label fx:id="totalAnimeLabel" alignment="CENTER" prefHeight="33.0" prefWidth="37.0" style="-fx-border-width: 2px; -fx-text-fill: #ED3F27; -fx-border-color: #ED3F27; -fx-border-radius: 200px;" text="10" wrapText="true">
+            <Label fx:id="totalAnimeLabel" alignment="CENTER" prefHeight="36.0" prefWidth="67.0" style="-fx-border-width: 2px; -fx-text-fill: #ED3F27; -fx-border-color: #ED3F27; -fx-border-radius: 200px;" text="10" wrapText="true">
                <font>
                   <Font size="20.0" />
                </font>
@@ -45,13 +45,13 @@
                </font>
             </Text>
             <Region prefHeight="43.0" prefWidth="72.0" HBox.hgrow="ALWAYS" />
-            <ComboBox fx:id="seasonFilterComboBox" prefWidth="150.0" promptText="season" />
+            <ComboBox fx:id="seasonFilterComboBox" prefWidth="172.0" promptText="season" />
             <TextField fx:id="searchField" prefHeight="32.0" prefWidth="233.0" promptText="search with title or stuido">
                <font>
                   <Font size="16.0" />
                </font>
             </TextField>
-            <Label fx:id="filterLabel" prefHeight="22.0" prefWidth="62.0" text="Filter 10" wrapText="true">
+            <Label fx:id="filterLabel" prefHeight="22.0" prefWidth="55.0" text="Filter 10" wrapText="true">
                <font>
                   <Font size="12.0" />
                </font>

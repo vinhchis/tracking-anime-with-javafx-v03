@@ -1,9 +1,9 @@
 .button {
-    -fx-background-color: #3498db;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-padding: 8 16;
-    -fx-background-radius: 5;
+    -fx-background-color: #3498db;   /* nền */
+    -fx-text-fill: white;            /* màu chữ */
+    -fx-font-size: 14px;             /* cỡ chữ */
+    -fx-padding: 8 16;               /* khoảng cách */
+    -fx-background-radius: 5;        /* bo tròn */
 }
 
 .button:hover {

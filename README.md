@@ -1,29 +1,26 @@
 # Tracking Anime Document
 
-## Giới thiệu
+## Yêu cầu
 
-Dự án tracking anime cho phép người dùng kìm tiếm anime từ Jikan API sau đó thực hiện chức năng tracking như: lên lịch, theo dõi lịch hằng tuần và nhận thông báo khi đến thời gian chiếu.
-
-## Yêu cầu cài đặt phần mềm
-
-### Môi trường
 - **Maven**: 3.9.x
 - **JavaJDK**: 24.0.2
 
-## Setup dự án
-1. Clone dự án từ github
+## Setup
+
+1. Clone về máy
 2. Sửa file `.env.example` thành `.env`, điền thông tin  connection của mình
-3. Build và Run
+3. Với lần chạy đầu tiên, mở khóa các comment trong function `seeds` của `SeedData.java` để tự tạo dữ liễu mẫu
+4. Build và Run
     - `mvn clean javafx:run` : chạy
-    - `mvn clean install` - build lại
-    - `mvn clean package` - export .jar
+    - `mvn clean install" - build lại
 
-**Nơi lưu trữ File hình**: `$HOME/.tracking-anime/images/`
 
-## Controls UI library
+**File hình**:
+- lưu trong:
+### Controls
 
-1. JavaFX
-2. JFoenix -> đã cũ (bỏ)
+1. JavaFX,
+2. JFoenix
 3. ControlsFX
 
 ## kiên trúc MVVM
@@ -36,8 +33,20 @@ Dự án tracking anime cho phép người dùng kìm tiếm anime từ Jikan AP
 
 ## Màn hình (Views)
 
-- Dashboard (Home)
-    1. Overview tab
-    2. Discover tab
-    3. My List tab
+## Auth
+- Login,
+- Register
+
+### User
+- MyList
 - Notification
+- Profile
+- Dashboard/Overview
+- Discover (List Anime, Search)
+- AnimeDetails
+
+### Admin
+- AdminDashboard
+- AnimeManagement
+- UserManagement
+

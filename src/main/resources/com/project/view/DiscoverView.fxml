@@ -18,41 +18,34 @@
    <top>
       <HBox alignment="CENTER" prefHeight="63.0" prefWidth="1200.0" spacing="20.0" style="-fx-background-color: #FAFDD6;" BorderPane.alignment="CENTER">
          <children>
-            <Label prefHeight="30.0" prefWidth="106.0" text="Policy" textFill="#ee0000">
+            <Label text="Policy" textFill="#ee0000">
                <tooltip>
                   <Tooltip fx:id="policyTooltip" wrapText="true" />
                </tooltip>
                <font>
-                  <Font name="System Bold Italic" size="16.0" />
+                  <Font name="System Bold Italic" size="13.0" />
                </font>
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icons/icons8-warning-48.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
             </Label>
             <Region prefHeight="63.0" prefWidth="46.0" />
-            <TextField fx:id="searchTextField" prefHeight="51.0" prefWidth="436.0" promptText="Enter anything about your anime">
+            <TextField fx:id="searchTextField" prefHeight="51.0" prefWidth="404.0" promptText="Enter anything about your anime">
                <font>
                   <Font size="24.0" />
                </font>
             </TextField>
-            <Button fx:id="searchButton" mnemonicParsing="false" prefHeight="51.0" prefWidth="177.0" style="-fx-background-color: linear-gradient(to right,rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 13%, rgba(0, 212, 255, 1) 100%); -fx-background-radius: 50;" text="Search" textFill="WHITE" wrapText="true">
+            <Button fx:id="searchButton" mnemonicParsing="false" prefHeight="51.0" prefWidth="34.0" style="-fx-background-color: #647FBC;" textFill="WHITE" wrapText="true">
                <font>
                   <Font name="System Bold Italic" size="24.0" />
                </font>
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/icons/icons8-search-100.png" />
+                        <Image url="@../images/icons/icons8-search-30.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Region prefHeight="63.0" prefWidth="225.0" />
-            <Button fx:id="addNewButton" mnemonicParsing="false" prefHeight="44.0" prefWidth="209.0" style="-fx-background-color: #DDC3C3; -fx-background-radius: 50;" text="Add new Anime" wrapText="true">
+            <Region prefHeight="63.0" prefWidth="347.0" />
+            <Button fx:id="addNewButton" mnemonicParsing="false" prefHeight="44.0" prefWidth="174.0" style="-fx-background-color: #DDC3C3;" text="Add new Anime" wrapText="true">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -68,9 +61,6 @@
                </tooltip>
             </Button>
          </children>
-         <padding>
-            <Insets left="20.0" right="20.0" />
-         </padding>
       </HBox>
    </top>
    <center>

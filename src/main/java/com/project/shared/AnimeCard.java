@@ -6,8 +6,6 @@ import com.project.util.HoverAnimation;
 
 import java.net.URL;
 
-import org.controlsfx.control.spreadsheet.Grid;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -117,11 +115,13 @@ public class AnimeCard extends VBox {
         // wire detail dialog
         detailBtn.setOnAction(evt -> showDetailsDialog(this.dto));
 
+        // Animation
+        // HoverAnimation.install(this);
     }
 
     private void showDetailsDialog(AnimeCardDto dto) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("ANIME DETAILS");
+        alert.setTitle("Anime details");
         alert.setWidth(800);
         alert.setResizable(true);
         alert.setHeaderText(dto.getTitle() + " Details");
@@ -134,6 +134,11 @@ public class AnimeCard extends VBox {
         grid.setHgap(10);
         grid.setVgap(5);
         grid.setPadding(new Insets(10));
+        grid.getChildren().forEach(node -> {
+            if (node instanceof Label) {
+                ((Label) node).setWrapText(true);
+            }
+        });
 
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setHgrow(Priority.ALWAYS);
@@ -142,26 +147,17 @@ public class AnimeCard extends VBox {
 
         grid.getColumnConstraints().addAll(col1, col2);
 
-        // grid.addRow(0, new Label("Anime ID:"), new Label(String.valueOf(dto.getAnimeId())));
-        // grid.addRow(1, new Label("API ID:"), new Label(String.valueOf(dto.getApiId())));
-        grid.addRow(0, new Label("Title:"), new Label(dto.getTitle()));
-        TextArea synopsisArea = new TextArea(dto.getSynopsis());
-        synopsisArea.setWrapText(true);
-        synopsisArea.setEditable(false);
-        synopsisArea.setPrefRowCount(5);
-        synopsisArea.setPrefWidth(400);
-        synopsisArea.setMaxWidth(600);
-        synopsisArea.setMaxHeight(400);
-        grid.addRow(1, new Label("Synopsis:"), synopsisArea);
-        grid.addRow(2, new Label("Type:"), new Label(dto.getAnimeType()));
-        grid.addRow(3, new Label("Status:"), new Label(dto.getAnimeStatus()));
-        grid.addRow(4, new Label("Episodes:"), new Label(String.valueOf(dto.getTotalEpisodes() != null ? dto.getTotalEpisodes() : "N/A")));
-        grid.addRow(5, new Label("Score:"), new Label(String.valueOf(dto.getScore()) + "/10"));
-        grid.addRow(6, new Label("Studio:"), new Label(dto.getStudioName()));
-        grid.addRow(7, new Label("Season:"), new Label(
-            (dto.getSeasonName() != null ? dto.getSeasonName() : "N/A") + " " +
-            (dto.getSeasonYear()) != null ? dto.getSeasonYear().toString() : "N/A"));
-        grid.addRow(8, new Label("URL:"), new Hyperlink(dto.getUrl()));
+        grid.addRow(0, new Label("Anime ID:"), new Label(String.valueOf(dto.getAnimeId())));
+        grid.addRow(1, new Label("API ID:"), new Label(String.valueOf(dto.getApiId())));
+        grid.addRow(2, new Label("Title:"), new Label(dto.getTitle()));
+        grid.addRow(3, new Label("Type:"), new Label(dto.getAnimeType()));
+        grid.addRow(4, new Label("Status:"), new Label(dto.getAnimeStatus()));
+        grid.addRow(5, new Label("Episodes:"), new Label(String.valueOf(dto.getTotalEpisodes())));
+        grid.addRow(6, new Label("Score:"), new Label(String.valueOf(dto.getScore())));
+        grid.addRow(7, new Label("Studio:"), new Label(dto.getStudioName()));
+        grid.addRow(8, new Label("Season:"), new Label(dto.getSeasonName() + " " + dto.getSeasonYear()));
+        grid.addRow(9, new Label("URL:"), new Hyperlink(dto.getUrl()));
+        grid.addRow(10, new Label("Synopsis:"), new Label(dto.getSynopsis()));
 
         alert.getDialogPane().setContent(grid);
         alert.showAndWait();

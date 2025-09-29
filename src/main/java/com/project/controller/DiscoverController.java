@@ -3,8 +3,10 @@ package com.project.controller;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Flow;
 
 import com.project.dto.AnimeCardDto;
 import com.project.dto.DataSaveDto;
@@ -20,7 +22,6 @@ import com.project.service.TrackingService;
 import com.project.shared.AnimeCard;
 import com.project.util.AlertUtil;
 import com.project.util.AssetUtil;
-import com.project.util.MapperUtil;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -72,7 +73,6 @@ public class DiscoverController implements Initializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        // setup
         policyTooltip.setText(
                 "Data provided by Jikan API (https://jikan.moe/)\n"
                         + "Only 10 animes are fetched per search\n"
@@ -81,9 +81,6 @@ public class DiscoverController implements Initializable {
                         + "Your Schedule Day is set to 'Sunday' and Schedule Time is 8:00 PM by default\n"
                         + "This product is not endorsed by or affiliated with MyAnimeList or its parent company DeNA Co., Ltd.");
 
-        fetchAndShowTopAnimes();
-
-        // event handlers
         searchButton.setOnAction(event -> {
             String query = searchTextField.getText().trim();
             if (!query.isEmpty()) {
@@ -133,39 +130,8 @@ public class DiscoverController implements Initializable {
         });
     }
 
-    private void fetchAndShowTopAnimes() {
-        CompletableFuture.supplyAsync(() -> {
-            try {
-                // encode the query to avoid spaces/special-char issues in URLs
-                // String encoded = URLEncoder.encode(q, StandardCharsets.UTF_8);
-                return apiService.getTopAnimeCardDto(14, "airing", "tv");
-            } catch (Exception e) {
-                // wrap checked exception to propagate to exceptionally block
-                throw new RuntimeException(e);
-            }
-        }).thenAccept(list -> {
-            Platform.runLater(() -> {
-                animeFlowPane.getChildren().clear();
-                list.forEach(animeCardDto -> {
-                    AnimeCard card = new AnimeCard(animeCardDto);
-                    card.getAddBtn().setOnAction(e -> addToMyList(animeCardDto));
-                    animeFlowPane.getChildren().add(card);
-                });
-                String title = "List top 10 airing TV animes";
-                String content = "Successfully fetched " + list.size() + " top anime.";
-                AlertUtil.showAlert(AlertType.INFORMATION, myListBorderPane.getScene().getWindow(), title, content);
-            });
-        }).exceptionally(ex -> {
-            Platform.runLater(() -> {
-                AlertUtil.showAlert(AlertType.ERROR, myListBorderPane.getScene().getWindow(),
-                        "Error fetching anime", ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
-            });
-            return null;
-        });
-    }
-
     public void addToMyList(AnimeCardDto dto) {
-        DataSaveDto saveDto = MapperUtil.mapToDataSave(dto);
+        DataSaveDto saveDto = apiService.mapToDataSave(dto);
         Tracking tracking = new Tracking();
         // setting default tracking values - to be made in TrackingDto setter
 

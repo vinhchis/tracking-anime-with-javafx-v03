@@ -10,6 +10,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
+import javax.imageio.ImageIO;
+
 import com.project.Main;
 
 import javafx.fxml.FXMLLoader;
@@ -156,11 +158,19 @@ public class AssetUtil {
     }
 
 
+    // from base + "/images/fallback.png"
     public static Image getFallbackImage() {
-        Path imagePath = Paths.get(System.getProperty("user.dir"), "images", "placeholder_300x250.png");
-        if (Files.exists(imagePath)) {
-            return new Image(imagePath.toUri().toString());
+        String imagePath = BASE + "/images/placeholder_300x250.png";
+        try {
+            InputStream is = Main.class.getResourceAsStream(imagePath);
+            if (is == null) {
+                throw new IllegalArgumentException("Image not found: " + imagePath);
+            }
+            return new Image(is);
+        } catch (Exception e) {
+            System.err.println("Can't load fallback image: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 }

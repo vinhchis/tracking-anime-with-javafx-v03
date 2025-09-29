@@ -1,0 +1,63 @@
+/* Base layout */
+.root {
+    -fx-font-family: "Segoe UI", "Roboto", "System";
+    -fx-background-color: linear-gradient(to bottom, #fafafa, #f2f4fb);
+}
+
+/* ComboBoxes */
+#filterStatusComboBox, #seasonFilterComboBox {
+    -fx-background-color: white;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 6 10 6 10;
+    -fx-font-size: 15px;
+    -fx-pref-height: 42px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 6, 0.0, 0, 2);
+}
+
+#filterStatusComboBox .list-cell, #seasonFilterComboBox .list-cell {
+    -fx-padding: 6 10 6 10;
+    -fx-font-size: 14px;
+}
+
+/* Search field */
+#searchField {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 6 10 6 10;
+    -fx-font-size: 14px;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 4, 0.0, 0, 1);
+}
+
+/* Total count badge */
+#totalAnimeLabel {
+    -fx-background-color: #fff7f6;
+    -fx-border-color: #ED3F27;
+    -fx-text-fill: #ED3F27;
+    -fx-border-radius: 100;
+    -fx-background-radius: 100;
+    -fx-padding: 4 10 4 10;
+    -fx-font-weight: bold;
+}
+
+/* Small filter label */
+#filterLabel {
+    -fx-text-fill: #666;
+    -fx-font-size: 12px;
+}
+
+/* Warning tooltip */
+.tooltip {
+    -fx-font-size: 12px;
+    -fx-background-color: #fffbe6;
+    -fx-text-fill: #333;
+    -fx-border-color: #ffd54f;
+    -fx-border-width: 1;
+    -fx-padding: 8;
+}
+
+/* FlowPane cards area */
+#trackingFlowPane {
+    -fx-padding: 12;
+}

@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.project.dto.TrackingDto;
-import com.project.entity.Season;
 import com.project.shared.TrackingCard;
 import com.project.util.AlertUtil;
 import com.project.util.SaveRegistry;
@@ -60,11 +59,12 @@ public class MyListController implements Initializable, Saveable {
         viewModel = new MyListViewModel();
         SaveRegistry.register(this);
 
+
         warningTooltip.setText("- Your tracking anime only saved when you move to another tabs or quit app." +
                 "\n - When \"My List\" selected again , your tracking was reset on last time you in there.");
 
         filterStatusComboBox.getItems().addAll("All", "Watching", "Completed", "On Hold", "Dropped", "Plan to Watch");
-        //style for season combo box
+        // style for season combo box
         seasonFilterComboBox.setCellFactory(lv -> new javafx.scene.control.ListCell<Pair<String, String>>() {
             @Override
             protected void updateItem(Pair<String, String> item, boolean empty) {
@@ -135,7 +135,6 @@ public class MyListController implements Initializable, Saveable {
         card.setData(dto);
 
         card.getDeleteButton().setOnAction(e -> {
-            viewModel.deleteTrackingById(dto.getTrackingId());
             boolean isRemove = AlertUtil.showConfirmationAlert(
                     Alert.AlertType.CONFIRMATION,
                     myListBorderPane.getScene().getWindow(),
@@ -143,6 +142,7 @@ public class MyListController implements Initializable, Saveable {
                     "Are you sure you want to delete this tracking?");
             if (isRemove) {
                 trackingFlowPane.getChildren().remove(card);
+                viewModel.deleteTrackingById(dto.getTrackingId());
                 AlertUtil.showAlert(AlertType.INFORMATION, myListBorderPane.getScene().getWindow(),
                         "Deleted", "Tracking deleted successfully.");
             }

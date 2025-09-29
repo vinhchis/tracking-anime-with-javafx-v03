@@ -38,7 +38,6 @@ public class CustomTimePicker extends HBox {
             minutePicker.getItems().add(i);
         }
 
-        // --- 3. Sắp xếp Layout ---
         this.setSpacing(5);
         this.setAlignment(Pos.CENTER);
         this.getChildren().addAll(hourPicker, separatorLabel, minutePicker, amPmToggle);

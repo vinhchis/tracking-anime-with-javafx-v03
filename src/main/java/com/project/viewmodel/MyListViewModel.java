@@ -11,7 +11,6 @@ import com.project.entity.Tracking.TRACKINGS_STATUS;
 import com.project.service.TrackingService;
 import com.project.shared.TrackingCard;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -36,23 +35,9 @@ public class MyListViewModel {
         return seasonFilterObjectProperty;
     }
 
-    // public ObservableList<Pair<String, String>> getSeasonList() {
-    // return seasonList;
-    // }
 
     private ObjectProperty<Pair<String, String>> selectedSeason = new SimpleObjectProperty(null);
 
-    public ObjectProperty<Pair<String, String>> getSelectedSeason() {
-        return selectedSeason;
-    }
-
-    public IntegerProperty getTotalAnimeWithStatus() {
-        return totalAnimeWithStatus;
-    }
-
-    public StringProperty getSearchText() {
-        return searchText;
-    }
 
     private List<Long> deletedList = new ArrayList<>();
     private final TrackingService trackingService;
@@ -89,10 +74,6 @@ public class MyListViewModel {
                 updateFilteredList();
             }
         });
-
-        // bind
-
-
     }
 
     private void updateFilteredList() {
@@ -157,8 +138,6 @@ public class MyListViewModel {
         };
         // get total anime before filter
         totalAnimeWithStatus.set(getStatusAnimeCount(enumStatus));
-        // set season list
-
 
         filteredList.setPredicate(dto -> {
             boolean statusMatches = status.equals("All") || dto.getTrackingStatus().equals(enumStatus);
@@ -259,6 +238,17 @@ public class MyListViewModel {
 
     public StringProperty filterStatusProperty() {
         return filterStatus;
+    }
+     public ObjectProperty<Pair<String, String>> getSelectedSeason() {
+        return selectedSeason;
+    }
+
+    public IntegerProperty getTotalAnimeWithStatus() {
+        return totalAnimeWithStatus;
+    }
+
+    public StringProperty getSearchText() {
+        return searchText;
     }
 
 }

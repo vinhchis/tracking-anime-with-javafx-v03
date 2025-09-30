@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     public static Stage primaryStage;
+
     @Override
     public void start(Stage stage) throws Exception {
         // SEED DATA //
@@ -34,7 +35,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void stop(){
+    public void stop() {
         SaveRegistry.saveAll();
         JpaUtil.shutdown();
 

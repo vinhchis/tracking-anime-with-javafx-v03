@@ -1,11 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.controller.OverviewController">
+<BorderPane fx:id="OverviewPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="619.0" prefWidth="932.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.controller.OverviewController"
+   stylesheets="@../css/over-view.css"
+>
+   <center>
+      <TabPane fx:id="tabPane" prefHeight="491.0" prefWidth="932.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab fx:id="sundayTab" text="Sunday" />
+          <Tab fx:id="mondayTab" text="Monday" />
+            <Tab fx:id="tuesdayTab" text="Tuesday" />
+            <Tab fx:id="wednesdayTab" text="Webnesday" />
+            <Tab fx:id="thursdayTab" text="Thursday" />
+            <Tab fx:id="fridayTab" text="Friday" />
+            <Tab fx:id="saturdayTab" text="Saturday" />
+        </tabs>
+      </TabPane>
+   </center>
+   <bottom>
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </bottom>
    <top>
-      <Label text="Overview" BorderPane.alignment="CENTER" />
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <PieChart fx:id="pieChart" prefHeight="335.0" prefWidth="363.0" />
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <HBox>
+                     <children>
+                        <Label text="Watching : " />
+                        <Label fx:id="watchingCountLabel" text="10" />
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label text="Completed :" />
+                        <Label fx:id="completedCountLabel" text="Label" />
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label text="Droped :" />
+                        <Label fx:id="droppedCountLabel" text="Label" />
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label text="Plan to Watch :" />
+                        <Label fx:id="planToWatchCountLabel" text="Label" />
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label text="On Hold :" />
+                        <Label fx:id="onHoldCountLabel" text="Label" />
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label text="Total :" />
+                        <Label fx:id="totalCountLabel" text="Label" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
    </top>
 </BorderPane>

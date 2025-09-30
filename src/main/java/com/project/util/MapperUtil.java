@@ -2,11 +2,13 @@ package com.project.util;
 
 import com.project.dto.AnimeCardDto;
 import com.project.dto.DataSaveDto;
+import com.project.dto.TrackingScheduleCardDto;
 import com.project.dto.JikanAnimeResponse.AnimeData;
 import com.project.entity.Anime;
 import com.project.entity.Season;
 import com.project.entity.Season.SEASON_NAME;
 import com.project.entity.Studio;
+import com.project.entity.Tracking;
 
 public class MapperUtil {
     public static DataSaveDto mapToDataSave(AnimeCardDto dto) {
@@ -112,6 +114,20 @@ public class MapperUtil {
 
         return animeCardDto;
 
+    }
+
+    public static TrackingScheduleCardDto mapToScheduleCardDto(Tracking tracking) {
+        if (tracking == null || tracking.getAnime() == null) {
+            return null;
+        }
+        return TrackingScheduleCardDto.builder()
+                .title(tracking.getAnime().getTitle())
+                .posterUrl(tracking.getAnime().getPosterUrl())
+                .lastWatchedEpisode(tracking.getLastWatchedEpisode())
+                .totalEpisodes(tracking.getAnime().getTotalEpisodes())
+                .scheduleDay(tracking.getScheduleDay())
+                .scheduleLocalTime(tracking.getScheduleTime())
+                .build();
     }
 
 }

@@ -2,11 +2,9 @@ package com.project.shared;
 
 import com.project.dto.AnimeCardDto;
 import com.project.util.AssetUtil;
-import com.project.util.HoverAnimation;
 
 import java.net.URL;
 
-import org.controlsfx.control.spreadsheet.Grid;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

@@ -3,8 +3,11 @@ package com.project.service;
 import java.util.List;
 
 import com.project.dto.TrackingDto;
+import com.project.dto.TrackingScheduleCardDto;
 import com.project.entity.Tracking;
+import com.project.entity.Tracking.TRACKINGS_STATUS;
 import com.project.repository.TrackingRepository;
+import com.project.util.MapperUtil;
 
 public class TrackingService {
     public final TrackingRepository trackingRepository;
@@ -89,5 +92,20 @@ public class TrackingService {
                 .findFirst().isPresent();
        return isExisted;
     }
+
+
+    public long countAllAnime() {
+        return trackingRepository.count();
+    }
+
+
+    // for watching only
+    public List<TrackingScheduleCardDto> getScheduleCardDtos(){
+        return trackingRepository.getTrackingsForSchedule().stream()
+            .filter(t -> t.getTrackingStatus() == TRACKINGS_STATUS.WATCHING)
+            .map(t -> MapperUtil.mapToScheduleCardDto(t)).toList();
+    }
+
+
 
 }

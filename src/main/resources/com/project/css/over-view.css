@@ -1,0 +1,92 @@
+/* Root */
+.root, .border-pane {
+    -fx-font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    -fx-background-color: linear-gradient(to bottom right, #f6f8ff, #ffffff);
+    -fx-padding: 12;
+}
+
+/* Top area: pie chart + stats */
+#pieChart {
+    -fx-pref-width: 360px;
+    -fx-pref-height: 320px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0, 0, 3);
+}
+
+/* Pie chart slice colors (adjust if more slices) */
+.chart-pie .default-color0.chart-pie {
+    -fx-pie-color: #4f46e5; /* watching */
+}
+.chart-pie .default-color1.chart-pie {
+    -fx-pie-color: #10b981; /* completed */
+}
+.chart-pie .default-color2.chart-pie {
+    -fx-pie-color: #f97316; /* dropped */
+}
+.chart-pie .default-color3.chart-pie {
+    -fx-pie-color: #60a5fa; /* plan to watch */
+}
+.chart-pie .default-color4.chart-pie {
+    -fx-pie-color: #f59e0b; /* on hold */
+}
+
+/* Pie labels */
+.chart-pie .chart-pie-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #222;
+}
+
+/* Stats row */
+HBox > HBox {
+    -fx-alignment: center-left;
+    -fx-spacing: 8;
+}
+HBox > HBox > Label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #334155;
+}
+#watchingCountLabel, #completedCountLabel, #droppedCountLabel, #planToWatchCountLabel, #onHoldCountLabel, #totalCountLabel {
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+    -fx-padding: 0 6 0 6;
+    -fx-background-color: rgba(79,70,229,0.06);
+    -fx-background-radius: 6;
+}
+
+/* TabPane and Tabs */
+.tab-pane {
+    -fx-background-color: transparent;
+}
+.tab-pane .tab-header-background {
+    -fx-background-color: transparent;
+}
+.tab-pane .tab {
+    -fx-font-size: 14px;
+    -fx-padding: 8 14 8 14;
+    -fx-background-radius: 8;
+}
+.tab-pane .tab:selected {
+    -fx-background-color: linear-gradient(#eef2ff, #eef6ff);
+    -fx-border-color: transparent;
+    -fx-text-fill: #4f46e5;
+    -fx-font-weight: 600;
+}
+
+/* Empty tab content placeholder */
+.tab-pane .tab-content-area {
+    -fx-padding: 14;
+}
+
+/* Small responsiveness */
+@media screen and (max-width: 900px) {
+    #pieChart { -fx-pref-width: 260px; -fx-pref-height: 240px; }
+}
+
+/* If schedule cards use .tracking-schedule-card class */
+.tracking-schedule-card {
+    -fx-background-color: linear-gradient(#ffffff, #fbfdff);
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 3);
+}

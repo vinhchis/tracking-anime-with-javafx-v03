@@ -1,0 +1,92 @@
+/* Card container */
+.schedule-card {
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #f6fbff);
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-padding: 0; /* padding handled in children */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0.0, 0, 3);
+    -fx-cursor: hand;
+    -fx-clip: null;
+    -fx-alignment: center;
+    -fx-overflow: hidden;
+    -fx-transition: none;
+}
+
+/* Hover -> stronger shadow and slight lift */
+.schedule-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 18, 0.0, 0, 6);
+    -fx-translate-y: -4;
+}
+
+/* Poster image */
+.schedule-card .card-poster {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0.0, 0, 3);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
+
+/* Overlay badges container */
+.schedule-card .badges-overlay {
+    -fx-spacing: 8;
+    -fx-padding: 6 8;
+}
+
+/* Generic badge */
+.schedule-card .badge {
+    -fx-background-color: linear-gradient(to right, rgba(255,255,255,0.95), rgba(255,255,255,0.88));
+    -fx-border-radius: 14;
+    -fx-background-radius: 14;
+    -fx-padding: 6 10;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #0f172a;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 6, 0, 0, 2);
+}
+
+/* Specific badge variants to highlight semantics */
+.schedule-card .badge-title {
+    -fx-background-color: linear-gradient(#ffffff, #eef2ff);
+    -fx-text-fill: #1f2937;
+    -fx-font-weight: 700;
+    -fx-font-size: 13px;
+}
+
+.schedule-card .badge-time {
+    -fx-background-color: linear-gradient(#e6f0ff, #e8f7ff);
+    -fx-text-fill: #1e3a8a;
+}
+
+.schedule-card .badge-ep {
+    -fx-background-color: linear-gradient(#fff7ed, #fff2e6);
+    -fx-text-fill: #92400e;
+}
+
+.schedule-card .badge-last {
+    -fx-background-color: linear-gradient(#f0fdf4, #ecfdf3);
+    -fx-text-fill: #065f46;
+}
+
+/* Info box (bottom-left small labels) */
+
+.schedule-card .card-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #0b1220;
+}
+
+.schedule-card .card-meta {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6b7280;
+}
+
+.schedule-card .card-time {
+    -fx-font-size: 12px;
+    -fx-text-fill: #2563eb;
+    -fx-font-weight: 600;
+}
+
+/* Responsive tweak */
+@media screen and (max-width: 520px) {
+    .schedule-card { -fx-pref-width: 100%; -fx-pref-height: auto; }
+    .schedule-card ImageView { -fx-fit-width: 200px; }
+}

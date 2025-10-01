@@ -2,7 +2,6 @@ package com.project.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.Flow;
 
 import com.project.dto.TrackingScheduleCardDto;
 import com.project.entity.Tracking.DAY_OF_WEEK;
@@ -37,6 +36,11 @@ public class OverviewController implements Initializable {
     @FXML
     private Tab sundayTab, mondayTab, tuesdayTab, wednesdayTab, thursdayTab, fridayTab, saturdayTab;
 
+    @FXML
+    private FlowPane sundayFlowPane, mondayFlowPane, tuesdayFlowPane, wednesdayFlowPane, thursdayFlowPane,
+            fridayFlowPane,
+            saturdayFlowPane;
+
     private OverviewViewModel viewModel;
 
     public OverviewController() {
@@ -46,11 +50,16 @@ public class OverviewController implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         loadData();
+
+        // default load sunday tab
+        viewModel.getSelectedDay().set(DAY_OF_WEEK.SUNDAY);
+        loadCardsToTab(sundayTab);
+
+        // listen for tab changes
         tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
             if (newTab == sundayTab) {
-              viewModel.getSelectedDay().set(DAY_OF_WEEK.SUNDAY);
+                viewModel.getSelectedDay().set(DAY_OF_WEEK.SUNDAY);
                 loadCardsToTab(sundayTab);
-
             } else if (newTab == mondayTab) {
                 viewModel.getSelectedDay().set(DAY_OF_WEEK.MONDAY);
                 loadCardsToTab(mondayTab);
@@ -71,19 +80,38 @@ public class OverviewController implements Initializable {
                 loadCardsToTab(saturdayTab);
             }
         });
+
     }
 
-
     private void loadCardsToTab(Tab tab) {
-        FlowPane flowPane = new FlowPane();
-        flowPane.setHgap(10);
-        flowPane.setVgap(10);
-        flowPane.setPadding(new Insets(10));
-        for (TrackingScheduleCardDto dto : viewModel.getDayList()) {
-            TrackingScheduleCard card = new TrackingScheduleCard(dto);
-            flowPane.getChildren().add(card);
+        FlowPane targetFlowPane = null;
+        if (tab == sundayTab) {
+            targetFlowPane = sundayFlowPane;
+        } else if (tab == mondayTab) {
+            targetFlowPane = mondayFlowPane;
+        } else if (tab == tuesdayTab) {
+            targetFlowPane = tuesdayFlowPane;
+        } else if (tab == wednesdayTab) {
+            targetFlowPane = wednesdayFlowPane;
+        } else if (tab == thursdayTab) {
+            targetFlowPane = thursdayFlowPane;
+        } else if (tab == fridayTab) {
+            targetFlowPane = fridayFlowPane;
+        } else if (tab == saturdayTab) {
+            targetFlowPane = saturdayFlowPane;
         }
-        tab.setContent(flowPane);
+
+        if (targetFlowPane != null) {
+            targetFlowPane.getChildren().clear();
+            targetFlowPane.setPadding(new Insets(10));
+            targetFlowPane.setHgap(10);
+            targetFlowPane.setVgap(10);
+
+            for (TrackingScheduleCardDto dto : viewModel.getScheduleList()) {
+                TrackingScheduleCard card = new TrackingScheduleCard(dto);
+                targetFlowPane.getChildren().add(card);
+            }
+        }
     }
 
     private void loadData() {

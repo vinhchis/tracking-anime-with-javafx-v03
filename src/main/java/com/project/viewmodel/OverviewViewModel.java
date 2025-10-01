@@ -11,41 +11,35 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 
 public class OverviewViewModel {
-    private TrackingService trackingService;
+    private final TrackingService trackingService;
+    private final ObservableList<TrackingScheduleCardDto> scheduleCardDtos = FXCollections.observableArrayList();
     private ObjectProperty<DAY_OF_WEEK> selectedDay = new SimpleObjectProperty<>(null);
-    public void setSelectedDay(ObjectProperty<DAY_OF_WEEK> selectedDay) {
-        this.selectedDay = selectedDay;
-    }
+    private FilteredList<TrackingScheduleCardDto> scheduleList;
 
+    public FilteredList<TrackingScheduleCardDto> getScheduleList() {
+        return scheduleList;
+    }
 
     public ObjectProperty<DAY_OF_WEEK> getSelectedDay() {
         return selectedDay;
     }
 
-    private ObservableList<TrackingScheduleCardDto> dayList;
-
-    public ObservableList<TrackingScheduleCardDto> getDayList() {
-        return dayList;
-    }
-
-
     public OverviewViewModel() {
         this.trackingService = new TrackingService();
-        dayList = FXCollections.observableArrayList();
-        List<TrackingScheduleCardDto> allDtos = trackingService.getScheduleCardDtos();
+        scheduleCardDtos.setAll(trackingService.getScheduleCardDtos());
+        scheduleList = new FilteredList<>(scheduleCardDtos, p -> true);
 
         selectedDay.addListener((obs, oldDay, newDay) -> {
             if (newDay != null) {
-                dayList.clear();
-                dayList.addAll(allDtos.stream()
-                        .filter(dto -> dto.getScheduleDay() == newDay)
-                        .toList());
+                scheduleList.setPredicate(dto -> dto.getScheduleDay() == newDay);
+            } else {
+                scheduleList.setPredicate(p -> true); // no filter
             }
         });
     }
-
 
     public long getTotalAnimeCount() {
         return trackingService.countAllAnime();
@@ -55,6 +49,10 @@ public class OverviewViewModel {
         return trackingService.getAllTrackings().stream()
                 .filter(t -> t.getTrackingStatus() == status)
                 .count();
+    }
+
+    public void setSelectedDay(ObjectProperty<DAY_OF_WEEK> selectedDay) {
+        this.selectedDay = selectedDay;
     }
 
 }

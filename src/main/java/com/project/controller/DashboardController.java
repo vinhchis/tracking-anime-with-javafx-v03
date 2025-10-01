@@ -50,9 +50,9 @@ public class DashboardController implements Initializable {
         notiToggleButton.setOnAction(this::handleNotiToggle);
 
         // Load default view
-        Parent root = AssetUtil.loadFXML(View.MY_LIST.getFxmlFile());
+        Parent root = AssetUtil.loadFXML(View.OVERVIEW.getFxmlFile());
         // set active class correctly (only the 'active' class, tab-button already present)
-        myListButton.getStyleClass().add("active");
+        overViewButton.getStyleClass().add("active");
         mainBorderPane.setCenter(root);
 
     }

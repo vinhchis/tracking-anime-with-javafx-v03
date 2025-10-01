@@ -1,8 +1,10 @@
+// src/main/java/com/project/controller/OverviewController.java
+
 package com.project.controller;
 
+import com.project.entity.Tracking.TrackingStatus;
 import com.project.navigation.Refreshable;
 import com.project.service.StatisticsService;
-import com.project.repository.TrackingRepositoryImpl; // giả định có repo này
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -12,8 +14,10 @@ import javafx.scene.text.Font;
 
 import java.util.Map;
 
+// Giả định rằng Controller này được tạo bởi một Factory có thể inject Service
 public class OverviewController implements Refreshable {
 
+    // --- FXML Components ---
     @FXML
     private Label totalAnimeLabel;
 
@@ -24,67 +28,76 @@ public class OverviewController implements Refreshable {
     private Label watchingAnimeLabel;
 
     @FXML
-    private GridPane genreStatsGrid;
+    private GridPane genreStatsGrid; // Giữ lại cho thống kê Season
 
     @FXML
     private GridPane seasonStatsGrid;
 
+    // --- Service Injection ---
+    // Sử dụng Setter Injection (vì constructor injection phức tạp hơn với JavaFX)
     private StatisticsService statisticsService;
 
-    public OverviewController() {
-        // ⚠️ Truyền repository vào service
-        this.statisticsService = new StatisticsService(new TrackingRepositoryImpl());
+    // Phương thức Setter để hệ thống DI (ví dụ: Spring) có thể inject StatisticsService vào
+    public void setStatisticsService(StatisticsService statisticsService) {
+        this.statisticsService = statisticsService;
     }
 
     @FXML
     private void initialize() {
-        updateStatistics();
+        // Kiểm tra service đã được inject chưa trước khi dùng (quan trọng)
+        if (statisticsService != null) {
+            updateStatistics();
+        }
     }
 
     @Override
     public void refresh() {
-        updateStatistics();
+        // Chỉ refresh nếu service đã sẵn sàng
+        if (statisticsService != null) {
+            updateStatistics();
+        }
     }
 
     private void updateStatistics() {
-        // Tổng số anime
-        totalAnimeLabel.setText(String.valueOf(statisticsService.getTotalAnimeCount()));
+        // Lấy dữ liệu thống kê theo trạng thái TỐI ƯU
+        Map<TrackingStatus, Long> statusStats = statisticsService.countByStatus();
 
-        // Anime đã hoàn thành
-        completedAnimeLabel.setText(String.valueOf(statisticsService.getAnimeCountByStatus("COMPLETED")));
+        // Tổng số anime (sử dụng hàm tối ưu)
+        totalAnimeLabel.setText(String.valueOf(statisticsService.countAllTrackedAnime()));
 
-        // Anime đang xem
-        watchingAnimeLabel.setText(String.valueOf(statisticsService.getAnimeCountByStatus("WATCHING")));
+        // Anime đã hoàn thành (Lấy từ Map)
+        long completedCount = statusStats.getOrDefault(TrackingStatus.COMPLETED, 0L);
+        completedAnimeLabel.setText(String.valueOf(completedCount));
 
-        // Thống kê theo thể loại
-        displayGenreStatistics(statisticsService.getGenreStatistics());
+        // Anime đang xem (Lấy từ Map)
+        long watchingCount = statusStats.getOrDefault(TrackingStatus.WATCHING, 0L);
+        watchingAnimeLabel.setText(String.valueOf(watchingCount));
 
-        // Thống kê theo mùa
+        // Thống kê theo mùa (season)
         displaySeasonStatistics(statisticsService.getSeasonStatistics());
+
+        // Loại bỏ Thống kê theo Thể loại vì Entity Anime không có trường genre.
+        // Xóa grid nếu không dùng
+        // ((VBox) genreStatsGrid.getParent()).getChildren().remove(genreStatsGrid);
+        // Thay vào đó, ta sẽ dùng genreStatsGrid để hiển thị một nội dung thay thế
+        displayGenreStatistics(null);
     }
 
+    // Tận dụng genreStatsGrid để hiển thị thông báo không có dữ liệu thể loại
     private void displayGenreStatistics(Map<String, Long> genreStats) {
         genreStatsGrid.getChildren().clear();
-        genreStatsGrid.setVgap(10);
-        genreStatsGrid.setHgap(10);
-
-        int row = 1;
-        int col = 0;
 
         Label header = new Label("Thống kê theo Thể loại");
         header.getStyleClass().add("section-title");
         GridPane.setColumnSpan(header, 2);
         genreStatsGrid.add(header, 0, 0);
 
-        for (Map.Entry<String, Long> entry : genreStats.entrySet()) {
-            VBox card = createStatCard(entry.getKey(), entry.getValue());
-            genreStatsGrid.add(card, col, row);
-            col++;
-            if (col > 1) {
-                col = 0;
-                row++;
-            }
-        }
+        Label noData = new Label("⚠️ Không có trường 'genre' trong Entity Anime");
+        noData.getStyleClass().add("stat-label");
+        GridPane.setColumnSpan(noData, 2);
+        genreStatsGrid.add(noData, 0, 1);
+
+        // Bạn có thể xóa toàn bộ logic này nếu không cần hiển thị Genre
     }
 
     private void displaySeasonStatistics(Map<String, Long> seasonStats) {
@@ -92,19 +105,15 @@ public class OverviewController implements Refreshable {
         seasonStatsGrid.setVgap(10);
         seasonStatsGrid.setHgap(10);
 
+        // Bỏ Label header ở đây vì nó đã có trong FXML
         int row = 1;
         int col = 0;
-
-        Label header = new Label("Thống kê theo Mùa");
-        header.getStyleClass().add("section-title");
-        GridPane.setColumnSpan(header, 2);
-        seasonStatsGrid.add(header, 0, 0);
 
         for (Map.Entry<String, Long> entry : seasonStats.entrySet()) {
             VBox card = createStatCard(entry.getKey(), entry.getValue());
             seasonStatsGrid.add(card, col, row);
             col++;
-            if (col > 1) {
+            if (col > 1) { // 2 cột mỗi hàng
                 col = 0;
                 row++;
             }
@@ -112,6 +121,7 @@ public class OverviewController implements Refreshable {
     }
 
     private VBox createStatCard(String title, long value) {
+        // ... (Giữ nguyên hàm này)
         VBox card = new VBox(5);
         card.getStyleClass().add("stat-card");
         card.setAlignment(Pos.CENTER);
@@ -127,9 +137,5 @@ public class OverviewController implements Refreshable {
         card.getChildren().addAll(valueLabel, titleLabel);
         return card;
     }
-
-    @Override
-    public void onFresh() {
-        refresh();
-    }
+    //
 }

@@ -34,4 +34,17 @@ public class TrackingRepository extends JpaRepository<Tracking, Long> {
             em.close();
         }
     }
+
+    //ham duoc them lan 1
+    public List<Tracking> getScheduledTrackings() {
+        EntityManager em = super.emf.createEntityManager();
+        try {
+            return em.createQuery("SELECT t FROM Tracking t "
+                            + "LEFT JOIN FETCH t.anime a "
+                            + "WHERE t.scheduleDay IS NOT NULL", Tracking.class)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }

@@ -7,7 +7,6 @@
 
     <persistence-unit name="MyPU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <!--5 tables-->
         <class>com.project.entity.Season</class>
         <class>com.project.entity.Studio</class>
         <class>com.project.entity.Anime</class>
@@ -15,16 +14,13 @@
         <class>com.project.entity.Notification</class>
 
         <properties>
-            <!-- Kết nối SQL Server -->
-            <property name="jakarta.persistence.jdbc.driver" value=""/>
+            <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
             <property name="jakarta.persistence.jdbc.url" value=""/>
             <property name="jakarta.persistence.jdbc.user" value=""/>
             <property name="jakarta.persistence.jdbc.password" value=""/>
 
-            <!-- Hibernate config -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/> <!-- -->
-            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/> <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
         </properties>
     </persistence-unit>

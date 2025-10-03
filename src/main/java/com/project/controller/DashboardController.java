@@ -1,10 +1,16 @@
 package com.project.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.util.Arrays; // Cần thiết để sửa lỗi List.of()
 import java.util.List;
 import java.util.ResourceBundle;
 
 import com.project.navigation.View;
+import com.project.service.ExportService; // Import ExportService
+import com.project.service.TrackingService; // Import TrackingService
 import com.project.util.AlertUtil;
 import com.project.util.AssetUtil;
 import com.project.util.SaveRegistry;
@@ -18,6 +24,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser; // Import FileChooser
+import javafx.stage.Stage; // Import Stage
 
 
 public class DashboardController implements Initializable {
@@ -30,14 +38,28 @@ public class DashboardController implements Initializable {
     @FXML
     private Button overViewButton, discoverButton, myListButton;
 
+    // Giả định có nút Export trong FXML
+    @FXML
+    private Button exportButton;
+
     private DashboardViewModel viewModel;
+
+    // Khai báo Services
+    private ExportService exportService;
+    private TrackingService trackingService;
 
     private List<Button> navButtons;
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         viewModel = new DashboardViewModel();
-        navButtons = List.of(overViewButton, discoverButton, myListButton);
+
+        // KHỞI TẠO SERVICES CỦA LỘC
+        this.trackingService = new TrackingService();
+        this.exportService = new ExportService(this.trackingService);
+
+        // SỬA LỖI: Thay thế List.of() bằng Arrays.asList()
+        navButtons = Arrays.asList(overViewButton, discoverButton, myListButton);
 
         navButtons.forEach(button -> {
             button.getStyleClass().add("tab-button");
@@ -49,12 +71,15 @@ public class DashboardController implements Initializable {
 
         notiToggleButton.setOnAction(this::handleNotiToggle);
 
+        // Giả định nút exportButton được cấu hình fx:onAction="#handleExportSchedule"
+        if (exportButton != null) {
+            exportButton.setOnAction(this::handleExportScheduleEvent);
+        }
+
         // Load default view
         Parent root = AssetUtil.loadFXML(View.OVERVIEW.getFxmlFile());
-        // set active class correctly (only the 'active' class, tab-button already present)
         overViewButton.getStyleClass().add("active");
         mainBorderPane.setCenter(root);
-
     }
 
     @FXML
@@ -77,9 +102,8 @@ public class DashboardController implements Initializable {
             default:
                 break;
         }
-        // add only the 'active' class
+
         clickedButton.getStyleClass().add("active");
-        // remove 'active' from others
         navButtons.stream().filter(btn -> btn != clickedButton).forEach(btn -> {
             btn.getStyleClass().remove("active");
         });
@@ -91,9 +115,38 @@ public class DashboardController implements Initializable {
     @FXML
     public void handleNotiToggle(ActionEvent event) {
         boolean isSelected = notiToggleButton.isSelected();
-        // todo
+        // todo: Thêm logic cho việc hiển thị/ẩn panel thông báo (sử dụng NotificationService của Lộc)
     }
 
+    // Phương thức này được gọi khi người dùng nhấn nút Export
+    @FXML
+    public void handleExportScheduleEvent(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Lưu Lịch Chiếu iCalendar");
 
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("iCalendar files (*.ics)", "*.ics");
+        fileChooser.getExtensionFilters().add(extFilter);
 
+        fileChooser.setInitialFileName("anime_schedule.ics");
+
+        // Lấy Stage hiện tại từ mainBorderPane
+        Stage stage = (Stage) mainBorderPane.getScene().getWindow();
+
+        File file = fileChooser.showSaveDialog(stage);
+
+        if (file != null) {
+            Path outputPath = file.toPath();
+            try {
+                // GỌI SERVICE XUẤT LỊCH CỦA LỘC
+                exportService.exportScheduleToIcs(outputPath);
+
+                AlertUtil.showAlert(AlertType.INFORMATION, stage, "Thành công",
+                        "Đã xuất lịch chiếu thành công ra: " + outputPath.toAbsolutePath());
+
+            } catch (IOException e) {
+                AlertUtil.showAlert(AlertType.ERROR, stage, "Lỗi Xuất File",
+                        "Không thể lưu file lịch chiếu: " + e.getMessage());
+            }
+        }
+    }
 }

@@ -1,83 +1,97 @@
-// package com.project.service;
+package com.project.service;
 
-// import java.time.Duration;
-// import java.time.LocalDateTime;
-// import java.time.LocalTime;
-// import java.util.ArrayList;
-// import java.util.List;
-// import java.util.concurrent.Executors;
-// import java.util.concurrent.ScheduledExecutorService;
-// import java.util.concurrent.TimeUnit;
+import com.project.entity.Notification;
+import com.project.entity.Tracking;
+import com.project.entity.Tracking.DAY_OF_WEEK;
+import com.project.repository.NotificationRepository;
+import com.project.repository.TrackingRepository;
+import com.project.util.JpaUtil;
 
-// import com.project.entity.Notification;
-// import com.project.entity.Tracking;
-// import com.project.entity.Notification.NOTIFY_TYPE;
-// import com.project.repository.NotificationRepository;
-// import com.project.repository.TrackingRepository;
-// import com.project.util.AlertUtil;
-// import com.project.viewmodel.NotificationViewModel;
+import jakarta.persistence.EntityManager; // ĐÃ THÊM IMPORT
+import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Locale;
 
-// import javafx.application.Platform;
+public class NotificationService {
 
-// public class NotificationService {
-//     private final TrackingRepository trackingRepository;
-//     private final NotificationRepository notificationRepository;
+    private final TrackingRepository trackingRepository;
+    private final NotificationRepository notificationRepository;
 
-//     public NotificationService() {
-//         this.notificationRepository = new NotificationRepository();
-//         this.trackingRepository = new TrackingRepository();
-//     }
+    public NotificationService(TrackingRepository trackingRepository, NotificationRepository notificationRepository) {
+        this.trackingRepository = trackingRepository;
+        this.notificationRepository = notificationRepository;
+    }
 
-//     public List<Notification> getAllNotifications() {
-//         return notificationRepository.findAll();
-//     }
+    /**
+     * Chạy định kỳ để kiểm tra các anime sắp chiếu và tạo/gửi thông báo.
+     * Cần được gọi bằng một Timer/Scheduler (ví dụ: trong Main hoặc DashboardController).
+     */
+    public void checkForScheduleNotifications() {
+        LocalDateTime now = LocalDateTime.now();
 
-//     public void markAsRead(Notification notification) {
-//         notification.setIsRead(true);
-//         notificationRepository.save(notification);
-//     }
+        // Chuyển đổi DayOfWeek của Java sang Enum DAY_OF_WEEK của dự án
+        DAY_OF_WEEK today = DAY_OF_WEEK.valueOf(now.getDayOfWeek().name().toUpperCase(Locale.ROOT));
 
-//     public void markAllAsRead() {
-//         List<Notification> notifications = notificationRepository.findAll().stream()
-//                 .filter(n -> !n.getIsRead())
-//                 .toList();
-//         for (Notification n : notifications) {
-//             n.setIsRead(true);
-//             notificationRepository.save(n);
-//         }
-//     }
+        // 1. Lấy tất cả Tracking có đặt lịch chiếu (dùng phương thức Lộc đã tạo)
+        List<Tracking> scheduledTrackings = trackingRepository.getScheduledTrackings();
 
-//     // create notification if there is any tracking that is in watching status and its
-//     // schedule time is now
+        for (Tracking tracking : scheduledTrackings) {
+            // Kiểm tra xem Tracking có phải chiếu hôm nay không
+            if (tracking.getScheduleDay() == today) {
+                // Lấy thời gian chiếu đã đặt
+                LocalTime scheduledTime = tracking.getScheduleTime();
 
-//     public List<Notification> createNotifications() {
-//         LocalDateTime now = LocalDateTime.now(); // current date and time
-//         LocalTime nowTime = now.toLocalTime(); // current time only
-//         List<Notification> notifications = new ArrayList<>();
-//         List<Tracking> watchingList = trackingRepository.findAll().stream()
-//                 .filter(t -> t.getTrackingStatus() == Tracking.TRACKINGS_STATUS.WATCHING)
-//                 .toList();
+                // Lấy thời gian hiện tại chỉ tính giờ/phút/giây
+                LocalTime currentTime = now.toLocalTime();
 
-//         // create notification in day
-//         for (Tracking t : watchingList) {
-//             if (t.getScheduleDay().toString().equalsIgnoreCase(now.getDayOfWeek().toString())) {
-//                 if (t.getScheduleTime().isBefore(nowTime.plusMinutes(1))
-//                         && t.getScheduleTime().isAfter(nowTime.minusMinutes(1))) {
-//                     // create notification
-//                     Notification n = Notification.builder()
-//                             // .title(t.getAnime().getTitle()+ " Release!")
-//                             .title("New Episode with tracking_id: " + t.getId() + " Release!")
-//                             .createdAt(now)
-//                             .notifiableType(NOTIFY_TYPE.EPISODE_RELEASE)
-//                             .isRead(false)
-//                             .build();
-//                     n.setTracking(t);
-//                     notifications.add(n);
-//                 }
-//             }
-//         }
-//         return notifications;
+                // Thiết lập cửa sổ thông báo: 15 phút trước giờ chiếu
+                LocalTime notificationTimeStart = scheduledTime.minusMinutes(15);
 
-//     }
+                // Kiểm tra: Nếu thời gian hiện tại nằm trong cửa sổ [notificationTimeStart, scheduledTime]
+                if (currentTime.isAfter(notificationTimeStart) && currentTime.isBefore(scheduledTime)) {
 
-// }
+                    // 2. Tạo thông báo
+                    String title = tracking.getAnime().getTitle();
+                    String message = String.format("%s sẽ chiếu tập tiếp theo lúc %s hôm nay!",
+                            title, scheduledTime.toString());
+
+                    Notification newNotification = Notification.builder()
+                            .title(message)
+                            .createdAt(now)
+                            .isRead(false)
+                            .tracking(tracking)
+                            .notifiableType(Notification.NOTIFY_TYPE.EPISODE_RELEASE)
+                            .build();
+
+                    // 3. Lưu thông báo vào DB
+                    notificationRepository.save(newNotification);
+
+                    // 4. Gửi thông báo Native (SỬA LỖI: Thay thế NotificationUtil bằng System.out.println)
+                    System.out.println("[NATIVE NOTIFICATION] " + message);
+                }
+            }
+        }
+    }
+
+    // Phương thức lấy tất cả thông báo chưa đọc
+    public List<Notification> getAllUnreadNotifications() {
+        EntityManager em = JpaUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            // SỬA LỖI: Tạo Query
+            return em.createQuery("SELECT n FROM Notification n WHERE n.isRead = FALSE ORDER BY n.createdAt DESC", Notification.class)
+                    .getResultList();
+        } finally {
+            // SỬA LỖI: Đóng EntityManager an toàn
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+    }
+
+    // Phương thức đánh dấu đã đọc
+    public void markAsRead(Notification notification) {
+        notification.setIsRead(true);
+        notificationRepository.save(notification);
+    }
+}

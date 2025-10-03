@@ -4,13 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.Arrays; // Cần thiết để sửa lỗi List.of()
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import com.project.navigation.View;
-import com.project.service.ExportService; // Import ExportService
-import com.project.service.TrackingService; // Import TrackingService
+import com.project.service.ExportService;
+import com.project.service.TrackingService;
 import com.project.util.AlertUtil;
 import com.project.util.AssetUtil;
 import com.project.util.SaveRegistry;
@@ -24,8 +24,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.FileChooser; // Import FileChooser
-import javafx.stage.Stage; // Import Stage
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 
 public class DashboardController implements Initializable {
@@ -38,9 +38,9 @@ public class DashboardController implements Initializable {
     @FXML
     private Button overViewButton, discoverButton, myListButton;
 
-    // Giả định có nút Export trong FXML
+    // ĐÃ SỬA: Khai báo để khớp với fx:id="exportScheduleButton" trong FXML
     @FXML
-    private Button exportButton;
+    private Button exportScheduleButton;
 
     private DashboardViewModel viewModel;
 
@@ -59,7 +59,11 @@ public class DashboardController implements Initializable {
         this.exportService = new ExportService(this.trackingService);
 
         // SỬA LỖI: Thay thế List.of() bằng Arrays.asList()
+        // CẦN THÊM 'exportScheduleButton' vào danh sách nếu muốn nó có style 'tab-button'
         navButtons = Arrays.asList(overViewButton, discoverButton, myListButton);
+
+        // Bạn nên kiểm tra nếu bạn muốn nút Export cũng là một phần của navButtons
+        // Nếu không, chỉ cần đảm bảo logic cho nó hoạt động.
 
         navButtons.forEach(button -> {
             button.getStyleClass().add("tab-button");
@@ -71,9 +75,9 @@ public class DashboardController implements Initializable {
 
         notiToggleButton.setOnAction(this::handleNotiToggle);
 
-        // Giả định nút exportButton được cấu hình fx:onAction="#handleExportSchedule"
-        if (exportButton != null) {
-            exportButton.setOnAction(this::handleExportScheduleEvent);
+        // ĐÃ SỬA: Sử dụng exportScheduleButton
+        if (exportScheduleButton != null) {
+            exportScheduleButton.setOnAction(this::handleExportScheduleEvent);
         }
 
         // Load default view

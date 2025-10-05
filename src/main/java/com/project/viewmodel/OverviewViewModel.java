@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 
 public class OverviewViewModel {
+
     private final TrackingService trackingService;
     private final StatisticsService statisticsService; // Khai báo StatisticsService
 
@@ -22,7 +23,11 @@ public class OverviewViewModel {
     private final LongProperty totalTrackingCount = new SimpleLongProperty(0);
     private final LongProperty watchingCount = new SimpleLongProperty(0);
     private final LongProperty completedCount = new SimpleLongProperty(0);
-    // Có thể thêm các trạng thái khác nếu cần (ON_HOLD, DROPPED, PLAN_TO_WATCH)
+
+    // thêm lần 1: khai báo thêm 3 trạng thái còn thiếu
+    private final LongProperty onHoldCount = new SimpleLongProperty(0);
+    private final LongProperty droppedCount = new SimpleLongProperty(0);
+    private final LongProperty planToWatchCount = new SimpleLongProperty(0);
 
     private final ObservableList<TrackingScheduleCardDto> scheduleCardDtos = FXCollections.observableArrayList();
     private final ObjectProperty<DAY_OF_WEEK> selectedDay = new SimpleObjectProperty<>(null);
@@ -49,19 +54,29 @@ public class OverviewViewModel {
         return completedCount;
     }
 
+    // thêm lần 1: getters cho 3 property mới
+    public LongProperty onHoldCountProperty() {
+        return onHoldCount;
+    }
+
+    public LongProperty droppedCountProperty() {
+        return droppedCount;
+    }
+
+    public LongProperty planToWatchCountProperty() {
+        return planToWatchCount;
+    }
 
     // Constructor phải nhận cả hai service (hoặc tự khởi tạo nếu không dùng DI framework)
-    // Giả định: ViewModel tự khởi tạo Service như cách đã làm trong TrackingService
     public OverviewViewModel() {
         // Khởi tạo các Service
         this.trackingService = new TrackingService();
-        // Lộc cần khởi tạo TrackingRepository trước khi khởi tạo StatisticsService
         this.statisticsService = new StatisticsService(this.trackingService.trackingRepository);
 
-        // 1. Tải dữ liệu lịch chiếu (dùng phương thức mới, tối ưu)
+        // 1. Tải dữ liệu lịch chiếu
         loadScheduleData();
 
-        // 2. Khởi tạo FilteredList sau khi đã có dữ liệu
+        // 2. Khởi tạo FilteredList
         scheduleList = new FilteredList<>(scheduleCardDtos, p -> true);
 
         // 3. Thiết lập Listener cho Filter
@@ -79,26 +94,21 @@ public class OverviewViewModel {
 
     // Phương thức tải dữ liệu lịch chiếu
     public void loadScheduleData() {
-        // Dùng phương thức đã tối ưu của Lộc (Bước 3)
         scheduleCardDtos.setAll(trackingService.getScheduledTrackingCardDtos());
     }
 
-    // Phương thức tải dữ liệu thống kê (Sử dụng StatisticsService của Lộc - Bước 1)
+    // Phương thức tải dữ liệu thống kê
     public void loadStatisticsData() {
         totalTrackingCount.set(statisticsService.getTotalTrackingCount());
         watchingCount.set(statisticsService.getTrackingCountByStatus(TRACKINGS_STATUS.WATCHING));
         completedCount.set(statisticsService.getTrackingCountByStatus(TRACKINGS_STATUS.COMPLETED));
+
+        // thêm lần 1: gán giá trị cho các trạng thái mới
+        onHoldCount.set(statisticsService.getTrackingCountByStatus(TRACKINGS_STATUS.ON_HOLD));
+        droppedCount.set(statisticsService.getTrackingCountByStatus(TRACKINGS_STATUS.DROPPED));
+        planToWatchCount.set(statisticsService.getTrackingCountByStatus(TRACKINGS_STATUS.PLAN_TO_WATCH));
     }
 
-
-    // LOẠI BỎ CÁC PHƯƠNG THỨC THỐNG KÊ CŨ KHÔNG CẦN THIẾT
-    /*
-    public long getTotalAnimeCount() { ... }
-    public long getAnimeCountByStatus(TRACKINGS_STATUS status) { ... }
-    public void setSelectedDay(ObjectProperty<DAY_OF_WEEK> selectedDay) { ... } // Không cần setter cho property
-    */
-
-    //
     public StatisticsService getStatisticsService() {
         return statisticsService;
     }

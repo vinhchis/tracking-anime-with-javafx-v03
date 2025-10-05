@@ -10,7 +10,7 @@ import com.project.shared.TrackingScheduleCard;
 import com.project.viewmodel.OverviewViewModel;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.fxml.Initializable; // Đã thêm Import
 import javafx.geometry.Insets;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
@@ -28,6 +28,7 @@ public class OverviewController implements Initializable {
     @FXML
     private PieChart pieChart;
 
+    // Đã Khai báo các Label theo FXML
     @FXML
     private Label watchingCountLabel, completedCountLabel, onHoldCountLabel, droppedCountLabel, planToWatchCountLabel,
             totalCountLabel;
@@ -46,32 +47,25 @@ public class OverviewController implements Initializable {
     private OverviewViewModel viewModel;
 
     public OverviewController() {
-        // ViewModel đã tự khởi tạo service bên trong (Bước 4)
         this.viewModel = new OverviewViewModel();
     }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-
-        // 1. GỌI TẢI DỮ LIỆU BAN ĐẦU (chỉ cần gọi 1 lần)
-        // Lưu ý: ViewModel đã gọi loadData trong constructor, nhưng gọi lại để đảm bảo
+        // 1. GỌI TẢI DỮ LIỆU BAN ĐẦU
         viewModel.loadScheduleData();
         viewModel.loadStatisticsData();
 
-        // 2. BINDING DỮ LIỆU THỐNG KÊ (Binding giúp tự cập nhật)
+        // 2. BINDING DỮ LIỆU THỐNG KÊ (Đã hoàn thiện)
         bindStatisticsData();
 
-        // 3. THIẾT LẬP CÁC FLOWPANE (Sử dụng Map để đơn giản hóa)
+        // 3. THIẾT LẬP CÁC FLOWPANE
         setupFlowPanes();
 
         // 4. BINDING LỊCH CHIẾU VÀ LẮNG NGHE THAY ĐỔI TAB
-        // Thiết lập lắng nghe cho FilteredList trong ViewModel
-        // Vì FilteredList chỉ chứa các DTO đã được lọc cho ngày đó, ta chỉ cần cập nhật FlowPane tương ứng.
         setupScheduleBinding();
 
         // Thiết lập tab mặc định và lắng nghe thay đổi tab
-        // Khi tab thay đổi, nó sẽ cập nhật selectedDay trong ViewModel,
-        // và Listener ở setupScheduleBinding sẽ tự động cập nhật UI.
         setupTabSelectionListener();
     }
 
@@ -81,16 +75,22 @@ public class OverviewController implements Initializable {
         watchingCountLabel.textProperty().bind(viewModel.watchingCountProperty().asString());
         completedCountLabel.textProperty().bind(viewModel.completedCountProperty().asString());
         totalCountLabel.textProperty().bind(viewModel.totalTrackingCountProperty().asString());
-        // Lộc cần thêm binding cho onHold, dropped, planToWatch tương tự nếu ViewModel có property cho chúng.
+
+        // BỔ SUNG: Hoàn thiện binding cho 3 trạng thái còn lại
+        // LƯU Ý: Các property này phải được thêm vào OverviewViewModel
+        onHoldCountLabel.textProperty().bind(viewModel.onHoldCountProperty().asString());
+        droppedCountLabel.textProperty().bind(viewModel.droppedCountProperty().asString());
+        planToWatchCountLabel.textProperty().bind(viewModel.planToWatchCountProperty().asString());
 
         // Binding PieChart (Cần PieChart.Data động, phức tạp hơn, ta sẽ làm tĩnh theo phong cách cũ)
-        // Cập nhật PieChart data
         updatePieChart();
 
         // Listener cho các property để cập nhật PieChart nếu dữ liệu thay đổi
         viewModel.watchingCountProperty().addListener((obs, oldVal, newVal) -> updatePieChart());
         viewModel.completedCountProperty().addListener((obs, oldVal, newVal) -> updatePieChart());
-        // ... thêm các Listener khác nếu cần ...
+        viewModel.onHoldCountProperty().addListener((obs, oldVal, newVal) -> updatePieChart()); // Bổ sung
+        viewModel.droppedCountProperty().addListener((obs, oldVal, newVal) -> updatePieChart());   // Bổ sung
+        viewModel.planToWatchCountProperty().addListener((obs, oldVal, newVal) -> updatePieChart()); // Bổ sung
     }
 
     // Cập nhật PieChart data
@@ -99,33 +99,26 @@ public class OverviewController implements Initializable {
         pieChart.getData().add(new Data("Watching", viewModel.watchingCountProperty().get()));
         pieChart.getData().add(new Data("Completed", viewModel.completedCountProperty().get()));
 
-        // Tạm thời hardcode, Lộc cần thêm logic lấy số liệu cho các trạng thái khác
-        // Sửa lỗi: Thay thế viewModel.statisticsService bằng viewModel.getStatisticsService()
-        pieChart.getData().add(new Data("On Hold", viewModel.getStatisticsService().getTrackingCountByStatus(TRACKINGS_STATUS.ON_HOLD)));
-        pieChart.getData().add(new Data("Dropped", viewModel.getStatisticsService().getTrackingCountByStatus(TRACKINGS_STATUS.DROPPED)));
-        pieChart.getData().add(new Data("Plan to Watch", viewModel.getStatisticsService().getTrackingCountByStatus(TRACKINGS_STATUS.PLAN_TO_WATCH)));
+        // ĐÃ SỬA: Lấy dữ liệu từ ViewModel Property (tốt hơn) thay vì gọi Service trực tiếp
+        pieChart.getData().add(new Data("On Hold", viewModel.onHoldCountProperty().get()));
+        pieChart.getData().add(new Data("Dropped", viewModel.droppedCountProperty().get()));
+        pieChart.getData().add(new Data("Plan to Watch", viewModel.planToWatchCountProperty().get()));
     }
 
-    // Phương thức thiết lập Binding cho lịch chiếu
+    // Phương thức thiết lập Binding cho lịch chiếu (Không thay đổi)
     private void setupScheduleBinding() {
-        // Map Enum DAY_OF_WEEK tới FlowPane tương ứng
         FlowPane[] flowPanes = new FlowPane[]{sundayFlowPane, mondayFlowPane, tuesdayFlowPane,
                 wednesdayFlowPane, thursdayFlowPane, fridayFlowPane,
                 saturdayFlowPane};
 
-        // Lắng nghe sự thay đổi trong FilteredList của ViewModel.
-        // Khi ViewModel lọc lại danh sách cho ngày mới, Listener này kích hoạt
         viewModel.getScheduleList().addListener((ListChangeListener<TrackingScheduleCardDto>) c -> {
             c.next();
-
-            // Lấy FlowPane đang được chọn (dựa vào selectedDay)
             DAY_OF_WEEK currentDay = viewModel.getSelectedDay().get();
             if (currentDay == null) return;
 
             FlowPane targetFlowPane = getFlowPaneForDay(currentDay);
 
             if (targetFlowPane != null) {
-                // Xóa và load lại chỉ FlowPane đang được hiển thị
                 targetFlowPane.getChildren().clear();
 
                 for (TrackingScheduleCardDto dto : viewModel.getScheduleList()) {
@@ -136,7 +129,7 @@ public class OverviewController implements Initializable {
         });
     }
 
-    // Khởi tạo các FlowPane (chỉ cần thiết lập padding và gap 1 lần)
+    // Khởi tạo các FlowPane (Không thay đổi)
     private void setupFlowPanes() {
         FlowPane[] allFlowPanes = new FlowPane[]{sundayFlowPane, mondayFlowPane, tuesdayFlowPane, wednesdayFlowPane, thursdayFlowPane, fridayFlowPane, saturdayFlowPane};
         for (FlowPane fp : allFlowPanes) {
@@ -148,40 +141,23 @@ public class OverviewController implements Initializable {
         }
     }
 
-
-    // Phương thức helper để lấy FlowPane dựa trên DAY_OF_WEEK (Đã chuyển sang Switch Statement)
+    // Phương thức helper để lấy FlowPane dựa trên DAY_OF_WEEK (Không thay đổi)
     private FlowPane getFlowPaneForDay(DAY_OF_WEEK day) {
         FlowPane targetFlowPane = null;
         switch (day) {
-            case SUNDAY:
-                targetFlowPane = sundayFlowPane;
-                break;
-            case MONDAY:
-                targetFlowPane = mondayFlowPane;
-                break;
-            case TUESDAY:
-                targetFlowPane = tuesdayFlowPane;
-                break;
-            case WEDNESDAY:
-                targetFlowPane = wednesdayFlowPane;
-                break;
-            case THURSDAY:
-                targetFlowPane = thursdayFlowPane;
-                break;
-            case FRIDAY:
-                targetFlowPane = fridayFlowPane;
-                break;
-            case SATURDAY:
-                targetFlowPane = saturdayFlowPane;
-                break;
-            default:
-                targetFlowPane = null; // Mặc dù Enum không có default, nhưng để an toàn
-                break;
+            case SUNDAY: targetFlowPane = sundayFlowPane; break;
+            case MONDAY: targetFlowPane = mondayFlowPane; break;
+            case TUESDAY: targetFlowPane = tuesdayFlowPane; break;
+            case WEDNESDAY: targetFlowPane = wednesdayFlowPane; break;
+            case THURSDAY: targetFlowPane = thursdayFlowPane; break;
+            case FRIDAY: targetFlowPane = fridayFlowPane; break;
+            case SATURDAY: targetFlowPane = saturdayFlowPane; break;
+            default: targetFlowPane = null; break;
         }
         return targetFlowPane;
     }
 
-    // Phương thức xử lý thay đổi Tab (chỉ cần gọi set SelectedDay trong ViewModel)
+    // Phương thức xử lý thay đổi Tab (Không thay đổi)
     private void setupTabSelectionListener() {
         tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
             if (newTab == sundayTab) {
@@ -199,16 +175,9 @@ public class OverviewController implements Initializable {
             } else if (newTab == saturdayTab) {
                 viewModel.getSelectedDay().set(DAY_OF_WEEK.SATURDAY);
             }
-            // Không cần gọi loadCardsToTab(newTab); vì nó được xử lý bởi setupScheduleBinding
         });
 
-        // Đặt mặc định
-        tabPane.getSelectionModel().select(sundayTab); // Chọn tab đầu tiên
+        // Đặt mặc định(---)
+        tabPane.getSelectionModel().select(sundayTab);
     }
-
-    // LOẠI BỎ PHƯƠNG THỨC loadData() và loadCardsToTab() CŨ
-    /*
-    private void loadCardsToTab(Tab tab) { ... }
-    private void loadData() { ... }
-    */
 }

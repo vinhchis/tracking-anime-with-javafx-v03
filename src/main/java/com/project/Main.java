@@ -17,7 +17,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        // SEED DATA // ahihi
+        // SEED DATA // a
         SeedData.seeds();
 
         // ---------- Setup Primary Stage ------- //

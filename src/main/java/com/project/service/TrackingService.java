@@ -1,6 +1,7 @@
 package com.project.service;
 
 import java.util.List;
+import java.util.stream.Collectors; // Đảm bảo import này đã được thêm
 
 import com.project.dto.TrackingDto;
 import com.project.dto.TrackingScheduleCardDto;
@@ -11,6 +12,7 @@ import com.project.util.MapperUtil;
 
 public class TrackingService {
     public final TrackingRepository trackingRepository;
+
     public TrackingService() {
         trackingRepository = new TrackingRepository();
     }
@@ -20,14 +22,17 @@ public class TrackingService {
     }
 
     public List<TrackingDto> getTrackingDtos(){
-        return trackingRepository.getTrackingFullInfo().stream().map(this::mapperToDto).toList();
+        // Sửa: .toList() -> .collect(Collectors.toList())
+        return trackingRepository.getTrackingFullInfo().stream().map(this::mapperToDto).collect(Collectors.toList());
     }
 
     public void saveTracking(Tracking tracking) {
         trackingRepository.save(tracking);
     }
+
     public void saveAll(List<TrackingDto> trackingDtos) {
-        List<Tracking> trackings = trackingDtos.stream().map(dto -> dtoToMapper(dto)).toList();
+        // Sửa: .toList() -> .collect(Collectors.toList())
+        List<Tracking> trackings = trackingDtos.stream().map(dto -> dtoToMapper(dto)).collect(Collectors.toList());
         trackingRepository.saveAll(trackings);
     }
 
@@ -60,7 +65,7 @@ public class TrackingService {
             dto.setAnimeType(tracking.getAnime().getAnimeType());
             dto.setImageUrl(tracking.getAnime().getPosterUrl());
             dto.setTotalEpisodes(tracking.getAnime().getTotalEpisodes() != null ? tracking.getAnime().getTotalEpisodes() : 0);
-             // studio
+            // studio
             if (tracking.getAnime().getStudio() != null) {
                 dto.setStudioName(tracking.getAnime().getStudio().getStudioName());
             }
@@ -76,21 +81,21 @@ public class TrackingService {
 
     private Tracking dtoToMapper(TrackingDto dto) {
         Tracking tracking = trackingRepository.findById((long) dto.getTrackingId()).orElseThrow(() -> new IllegalArgumentException("Tracking not found"));
-            // update fields
-            tracking.setTrackingStatus(dto.getTrackingStatus());
-            tracking.setLastWatchedEpisode(dto.getLastWatchedEpisode());
-            tracking.setScheduleDay(dto.getScheduleDay());
-            tracking.setScheduleTime(dto.getScheduleLocalTime());
-            tracking.setRating(dto.getRating());
-            tracking.setNote(dto.getNote());
-            return tracking;
+        // update fields
+        tracking.setTrackingStatus(dto.getTrackingStatus());
+        tracking.setLastWatchedEpisode(dto.getLastWatchedEpisode());
+        tracking.setScheduleDay(dto.getScheduleDay());
+        tracking.setScheduleTime(dto.getScheduleLocalTime());
+        tracking.setRating(dto.getRating());
+        tracking.setNote(dto.getNote());
+        return tracking;
     }
 
     public boolean checkExistedAnimeOfTracking(String title) {
         boolean isExisted = trackingRepository.getTrackingFullInfo().stream()
                 .filter(t -> t.getAnime() != null && t.getAnime().getTitle().equalsIgnoreCase(title))
                 .findFirst().isPresent();
-       return isExisted;
+        return isExisted;
     }
 
 
@@ -102,10 +107,21 @@ public class TrackingService {
     // for watching only
     public List<TrackingScheduleCardDto> getScheduleCardDtos(){
         return trackingRepository.getTrackingsForSchedule().stream()
-            .filter(t -> t.getTrackingStatus() == TRACKINGS_STATUS.WATCHING)
-            .map(t -> MapperUtil.mapToScheduleCardDto(t)).toList();
+                .filter(t -> t.getTrackingStatus() == TRACKINGS_STATUS.WATCHING)
+                // Sửa: .toList() -> .collect(Collectors.toList())
+                .map(t -> MapperUtil.mapToScheduleCardDto(t)).collect(Collectors.toList());
     }
 
-
-
+    /**
+     * Lấy danh sách Tracking có lịch chiếu, sử dụng phương thức tối ưu
+     * đã thêm vào TrackingRepository.
+     * @return Danh sách DTO lịch chiếu.
+     */
+    public List<TrackingScheduleCardDto> getScheduledTrackingCardDtos() {
+        return trackingRepository.getScheduledTrackings().stream()
+                // Sửa: .map(MapperUtil::mapToScheduleCardDto) -> .map(t -> MapperUtil.mapToScheduleCardDto(t))
+                .map(t -> MapperUtil.mapToScheduleCardDto(t))
+                // Sửa: .toList() -> .collect(Collectors.toList())
+                .collect(Collectors.toList());
+    }
 }

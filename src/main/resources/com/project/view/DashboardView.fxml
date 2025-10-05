@@ -111,6 +111,15 @@
                         </ImageView>
                      </graphic>
                   </Button>
+                  <Button fx:id="exportScheduleButton" mnemonicParsing="false" text="Export Schedule" onAction="#handleExportScheduleEvent">
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/icons/icons8-bell-100.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </children>
             </HBox>
          </children>

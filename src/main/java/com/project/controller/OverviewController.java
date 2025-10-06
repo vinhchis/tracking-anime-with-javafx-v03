@@ -9,6 +9,7 @@ import com.project.entity.Tracking.TRACKINGS_STATUS;
 import com.project.shared.TrackingScheduleCard;
 import com.project.viewmodel.OverviewViewModel;
 
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -18,6 +19,10 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class OverviewController implements Initializable {
     @FXML
@@ -54,6 +59,7 @@ public class OverviewController implements Initializable {
         // default load sunday tab
         viewModel.getSelectedDay().set(DAY_OF_WEEK.SUNDAY);
         loadCardsToTab(sundayTab);
+
 
         // listen for tab changes
         tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {

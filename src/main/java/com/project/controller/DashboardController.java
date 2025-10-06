@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.project.navigation.Refreshable;
 import com.project.navigation.View;
 import com.project.util.AlertUtil;
 import com.project.util.AssetUtil;
@@ -12,13 +13,13 @@ import com.project.viewmodel.DashboardViewModel;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
-
 
 public class DashboardController implements Initializable {
     @FXML
@@ -51,7 +52,8 @@ public class DashboardController implements Initializable {
 
         // Load default view
         Parent root = AssetUtil.loadFXML(View.OVERVIEW.getFxmlFile());
-        // set active class correctly (only the 'active' class, tab-button already present)
+        // set active class correctly (only the 'active' class, tab-button already
+        // present)
         overViewButton.getStyleClass().add("active");
         mainBorderPane.setCenter(root);
 
@@ -62,14 +64,23 @@ public class DashboardController implements Initializable {
         Button clickedButton = (Button) event.getSource();
         Parent root = null;
 
+        // add only the 'active' class
+        clickedButton.getStyleClass().add("active");
+        // remove 'active' from others
+        navButtons.stream().filter(btn -> btn != clickedButton).forEach(btn -> {
+            btn.getStyleClass().remove("active");
+        });
+        AlertUtil.showAlert(AlertType.INFORMATION, mainBorderPane.getScene().getWindow(),
+                "Navigate to " + clickedButton.getText(), "You just clicked " + clickedButton.getText() + " button.");
+
         switch (clickedButton.getId()) {
             case "overViewButton":
-                root = AssetUtil.loadFXML(View.OVERVIEW.getFxmlFile());
                 SaveRegistry.saveAll();
+                root = AssetUtil.loadFXML(View.OVERVIEW.getFxmlFile());
                 break;
             case "discoverButton":
-                root = AssetUtil.loadFXML(View.DISCOVER.getFxmlFile());
                 SaveRegistry.saveAll();
+                root = AssetUtil.loadFXML(View.DISCOVER.getFxmlFile());
                 break;
             case "myListButton":
                 root = AssetUtil.loadFXML(View.MY_LIST.getFxmlFile());
@@ -77,15 +88,9 @@ public class DashboardController implements Initializable {
             default:
                 break;
         }
-        // add only the 'active' class
-        clickedButton.getStyleClass().add("active");
-        // remove 'active' from others
-        navButtons.stream().filter(btn -> btn != clickedButton).forEach(btn -> {
-            btn.getStyleClass().remove("active");
-        });
+
         mainBorderPane.setCenter(root);
-        AlertUtil.showAlert(AlertType.INFORMATION, mainBorderPane.getScene().getWindow(),
-                "Navigate to " + clickedButton.getText(), "You just clicked " + clickedButton.getText() + " button.");
+
     }
 
     @FXML
@@ -94,6 +99,23 @@ public class DashboardController implements Initializable {
         // todo
     }
 
+    private void openView(String fxmlPath) {
+        try {
+            // save changes first so Overview reads newest data
+            SaveRegistry.saveAll();
 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+
+            Object controller = loader.getController();
+            if (controller instanceof Refreshable) {
+                ((Refreshable) controller).onFresh();
+            }
+
+            mainBorderPane.setCenter(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

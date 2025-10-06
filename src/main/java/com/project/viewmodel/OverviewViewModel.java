@@ -15,7 +15,8 @@ import javafx.collections.transformation.FilteredList;
 
 public class OverviewViewModel {
     private final TrackingService trackingService;
-    private final ObservableList<TrackingScheduleCardDto> scheduleCardDtos = FXCollections.observableArrayList();
+    private ObservableList<TrackingScheduleCardDto> allScheduleCardDtos = FXCollections.observableArrayList();
+    private ObservableList<TrackingScheduleCardDto> scheduleCardDtos = FXCollections.observableArrayList();
     private ObjectProperty<DAY_OF_WEEK> selectedDay = new SimpleObjectProperty<>(null);
     private FilteredList<TrackingScheduleCardDto> scheduleList;
 
@@ -29,8 +30,9 @@ public class OverviewViewModel {
 
     public OverviewViewModel() {
         this.trackingService = new TrackingService();
-        scheduleCardDtos.setAll(trackingService.getScheduleCardDtos());
-        scheduleList = new FilteredList<>(scheduleCardDtos, p -> true);
+        allScheduleCardDtos.setAll(trackingService.getScheduleCardDtos());
+        // scheduleCardDtos.setAll(trackingService.getScheduleCardDtos());
+        scheduleList = new FilteredList<>(allScheduleCardDtos, p -> true);
 
         selectedDay.addListener((obs, oldDay, newDay) -> {
             if (newDay != null) {

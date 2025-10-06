@@ -21,4 +21,13 @@ public class AnimeService {
             return null;
         }
     }
+
+    public Anime findByApiId(int apiId) {
+        try {
+            return animeRepository.findBy("apiId", apiId).getFirst();
+        } catch (Exception e) {
+            System.err.println("Can't find anime with apiId: " + apiId + " \n " + e.getMessage());
+            return null;
+        }
+    }
 }

@@ -64,5 +64,14 @@ public class Anime {
         TV, MOVIE, OVA, SPECIAL
     }
 
+    public void setTitle(String title) {
+        if (title != null && title.length() > 50) {
+            this.title = title.substring(0, 50);
+        } else {
+            this.title = title;
+        }
+    }
+
+
 
 }

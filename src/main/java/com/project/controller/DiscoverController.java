@@ -170,8 +170,8 @@ public class DiscoverController implements Initializable {
         // setting default tracking values - to be made in TrackingDto setter
 
         // check if anime already in tracking
-        if (trackingService.checkExistedAnimeOfTracking(dto.getTitle())) {
-            System.out.println("Anime already in tracking: " + dto.getTitle());
+        if (trackingService.checkExistedAnimeOfTracking(saveDto.getAnime().getTitle())) {
+            System.out.println("Anime already in tracking: " + saveDto.getAnime().getTitle());
             AlertUtil.showAlert(
                     AlertType.ERROR,
                     myListBorderPane.getScene().getWindow(),
@@ -181,7 +181,8 @@ public class DiscoverController implements Initializable {
         }
 
         // save file and update posterUrl
-        Anime anime = animeService.findByTitle(dto.getTitle());
+        Anime anime = animeService.findByApiId(dto.getApiId());
+        // Anime anime = animeService.findByTitle(dto.getTitle());
         if (anime != null) {
             tracking.setAnime(animeService.saveAnime(anime));
             System.out.println("Anime already in database: " + dto.getTitle());

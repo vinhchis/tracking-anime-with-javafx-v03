@@ -75,7 +75,7 @@ public class DiscoverController implements Initializable {
         // setup
         policyTooltip.setText(
                 "Data provided by Jikan API (https://jikan.moe/)\n"
-                        + "Only 10 animes are fetched per search\n"
+                        + "Only max 14 animes are fetched per search\n"
                         + "After adding to My List, the anime data is saved to local database\n"
                         + "Your Status Tracking for adding anime is set to 'Watching' by default\n"
                         + "Your Schedule Day is set to 'Sunday' and Schedule Time is 8:00 PM by default\n"
@@ -87,10 +87,27 @@ public class DiscoverController implements Initializable {
         searchButton.setOnAction(event -> {
             String query = searchTextField.getText().trim();
             if (!query.isEmpty()) {
-                fetchAndShowAnimeWithQuery(query, 10);
+                fetchAndShowAnimeWithQuery(query, 14);
             } else {
                 AlertUtil.showAlert(AlertType.WARNING, myListBorderPane.getScene().getWindow(),
                         "Input Required", "Please enter a search term.");
+            }
+        });
+
+        // Enter key to search
+        searchTextField.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case ENTER:
+                    String query = searchTextField.getText().trim();
+                    if (!query.isEmpty()) {
+                        fetchAndShowAnimeWithQuery(query, 14);
+                    } else {
+                        AlertUtil.showAlert(AlertType.WARNING, myListBorderPane.getScene().getWindow(),
+                                "Input Required", "Please enter a search term.");
+                    }
+                    break;
+                default:
+                    break;
             }
         });
 
@@ -151,7 +168,7 @@ public class DiscoverController implements Initializable {
                     card.getAddBtn().setOnAction(e -> addToMyList(animeCardDto));
                     animeFlowPane.getChildren().add(card);
                 });
-                String title = "List top 10 airing TV animes";
+                String title = "List top 14 airing TV animes";
                 String content = "Successfully fetched " + list.size() + " top anime.";
                 AlertUtil.showAlert(AlertType.INFORMATION, myListBorderPane.getScene().getWindow(), title, content);
             });

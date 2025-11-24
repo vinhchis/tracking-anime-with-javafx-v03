@@ -106,6 +106,8 @@ public class TrackingService {
             .map(t -> MapperUtil.mapToScheduleCardDto(t)).toList();
     }
 
+   //update newest animes
+
 
 
 }

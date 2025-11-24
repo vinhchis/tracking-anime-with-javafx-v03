@@ -64,15 +64,6 @@ public class DashboardController implements Initializable {
         Button clickedButton = (Button) event.getSource();
         Parent root = null;
 
-        // add only the 'active' class
-        clickedButton.getStyleClass().add("active");
-        // remove 'active' from others
-        navButtons.stream().filter(btn -> btn != clickedButton).forEach(btn -> {
-            btn.getStyleClass().remove("active");
-        });
-        AlertUtil.showAlert(AlertType.INFORMATION, mainBorderPane.getScene().getWindow(),
-                "Navigate to " + clickedButton.getText(), "You just clicked " + clickedButton.getText() + " button.");
-
         switch (clickedButton.getId()) {
             case "overViewButton":
                 SaveRegistry.saveAll();
@@ -90,6 +81,15 @@ public class DashboardController implements Initializable {
         }
 
         mainBorderPane.setCenter(root);
+
+        // add only the 'active' class
+        clickedButton.getStyleClass().add("active");
+        // remove 'active' from others
+        navButtons.stream().filter(btn -> btn != clickedButton).forEach(btn -> {
+            btn.getStyleClass().remove("active");
+        });
+        AlertUtil.showAlert(AlertType.INFORMATION, mainBorderPane.getScene().getWindow(),
+                "Navigate to " + clickedButton.getText(), "You just clicked " + clickedButton.getText() + " button.");
 
     }
 

@@ -10,8 +10,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
-import javax.imageio.ImageIO;
-
 import com.project.Main;
 
 import javafx.fxml.FXMLLoader;

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.project.navigation.Refreshable;
 import com.project.navigation.View;
 import com.project.service.ExportService;
 import com.project.service.TrackingService;
@@ -18,15 +19,13 @@ import com.project.viewmodel.DashboardViewModel;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-
 
 public class DashboardController implements Initializable {
     @FXML
@@ -82,6 +81,8 @@ public class DashboardController implements Initializable {
 
         // Load default view
         Parent root = AssetUtil.loadFXML(View.OVERVIEW.getFxmlFile());
+        // set active class correctly (only the 'active' class, tab-button already
+        // present)
         overViewButton.getStyleClass().add("active");
         mainBorderPane.setCenter(root);
     }
@@ -93,12 +94,12 @@ public class DashboardController implements Initializable {
 
         switch (clickedButton.getId()) {
             case "overViewButton":
-                root = AssetUtil.loadFXML(View.OVERVIEW.getFxmlFile());
                 SaveRegistry.saveAll();
+                root = AssetUtil.loadFXML(View.OVERVIEW.getFxmlFile());
                 break;
             case "discoverButton":
-                root = AssetUtil.loadFXML(View.DISCOVER.getFxmlFile());
                 SaveRegistry.saveAll();
+                root = AssetUtil.loadFXML(View.DISCOVER.getFxmlFile());
                 break;
             case "myListButton":
                 root = AssetUtil.loadFXML(View.MY_LIST.getFxmlFile());
@@ -107,50 +108,41 @@ public class DashboardController implements Initializable {
                 break;
         }
 
+        mainBorderPane.setCenter(root);
+
+        // add only the 'active' class
         clickedButton.getStyleClass().add("active");
         navButtons.stream().filter(btn -> btn != clickedButton).forEach(btn -> {
             btn.getStyleClass().remove("active");
         });
-        mainBorderPane.setCenter(root);
         AlertUtil.showAlert(AlertType.INFORMATION, mainBorderPane.getScene().getWindow(),
                 "Navigate to " + clickedButton.getText(), "You just clicked " + clickedButton.getText() + " button.");
+
     }
 
     @FXML
     public void handleNotiToggle(ActionEvent event) {
         boolean isSelected = notiToggleButton.isSelected();
-        // todo: Thêm logic cho việc hiển thị/ẩn panel thông báo (sử dụng NotificationService của Lộc)
+        // todo
     }
 
-    // Phương thức này được gọi khi người dùng nhấn nút Export
-    @FXML
-    public void handleExportScheduleEvent(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Lưu Lịch Chiếu iCalendar");
+    private void openView(String fxmlPath) {
+        try {
+            // save changes first so Overview reads newest data
+            SaveRegistry.saveAll();
 
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("iCalendar files (*.ics)", "*.ics");
-        fileChooser.getExtensionFilters().add(extFilter);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
 
-        fileChooser.setInitialFileName("anime_schedule.ics");
-
-        // Lấy Stage hiện tại từ mainBorderPane
-        Stage stage = (Stage) mainBorderPane.getScene().getWindow();
-
-        File file = fileChooser.showSaveDialog(stage);
-
-        if (file != null) {
-            Path outputPath = file.toPath();
-            try {
-                // GỌI SERVICE XUẤT LỊCH CỦA LỘC
-                exportService.exportScheduleToIcs(outputPath);
-
-                AlertUtil.showAlert(AlertType.INFORMATION, stage, "Thành công",
-                        "Đã xuất lịch chiếu thành công ra: " + outputPath.toAbsolutePath());
-
-            } catch (IOException e) {
-                AlertUtil.showAlert(AlertType.ERROR, stage, "Lỗi Xuất File",
-                        "Không thể lưu file lịch chiếu: " + e.getMessage());
+            Object controller = loader.getController();
+            if (controller instanceof Refreshable) {
+                ((Refreshable) controller).onFresh();
             }
+
+            mainBorderPane.setCenter(root);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
 }

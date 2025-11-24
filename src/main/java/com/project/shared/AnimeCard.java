@@ -158,7 +158,8 @@ public class AnimeCard extends VBox {
         grid.addRow(6, new Label("Studio:"), new Label(dto.getStudioName()));
         grid.addRow(7, new Label("Season:"), new Label(
             (dto.getSeasonName() != null ? dto.getSeasonName() : "N/A") + " " +
-            (dto.getSeasonYear()) != null ? dto.getSeasonYear().toString() : "N/A"));
+            (dto.getSeasonYear() != null ? dto.getSeasonYear().toString() : "N/A")
+        ));
         grid.addRow(8, new Label("URL:"), new Hyperlink(dto.getUrl()));
 
         alert.getDialogPane().setContent(grid);

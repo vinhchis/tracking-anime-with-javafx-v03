@@ -17,21 +17,10 @@ import javafx.collections.transformation.FilteredList;
 public class OverviewViewModel {
 
     private final TrackingService trackingService;
-    private final StatisticsService statisticsService; // Khai báo StatisticsService
-
-    // Dùng LongProperty cho thống kê
-    private final LongProperty totalTrackingCount = new SimpleLongProperty(0);
-    private final LongProperty watchingCount = new SimpleLongProperty(0);
-    private final LongProperty completedCount = new SimpleLongProperty(0);
-
-    // thêm lần 1: khai báo thêm 3 trạng thái còn thiếu
-    private final LongProperty onHoldCount = new SimpleLongProperty(0);
-    private final LongProperty droppedCount = new SimpleLongProperty(0);
-    private final LongProperty planToWatchCount = new SimpleLongProperty(0);
-
-    private final ObservableList<TrackingScheduleCardDto> scheduleCardDtos = FXCollections.observableArrayList();
-    private final ObjectProperty<DAY_OF_WEEK> selectedDay = new SimpleObjectProperty<>(null);
-    private final FilteredList<TrackingScheduleCardDto> scheduleList;
+    private ObservableList<TrackingScheduleCardDto> allScheduleCardDtos = FXCollections.observableArrayList();
+    private ObservableList<TrackingScheduleCardDto> scheduleCardDtos = FXCollections.observableArrayList();
+    private ObjectProperty<DAY_OF_WEEK> selectedDay = new SimpleObjectProperty<>(null);
+    private FilteredList<TrackingScheduleCardDto> scheduleList;
 
     public FilteredList<TrackingScheduleCardDto> getScheduleList() {
         return scheduleList;
@@ -71,13 +60,9 @@ public class OverviewViewModel {
     public OverviewViewModel() {
         // Khởi tạo các Service
         this.trackingService = new TrackingService();
-        this.statisticsService = new StatisticsService(this.trackingService.trackingRepository);
-
-        // 1. Tải dữ liệu lịch chiếu
-        loadScheduleData();
-
-        // 2. Khởi tạo FilteredList
-        scheduleList = new FilteredList<>(scheduleCardDtos, p -> true);
+        allScheduleCardDtos.setAll(trackingService.getScheduleCardDtos());
+        // scheduleCardDtos.setAll(trackingService.getScheduleCardDtos());
+        scheduleList = new FilteredList<>(allScheduleCardDtos, p -> true);
 
         // 3. Thiết lập Listener cho Filter
         selectedDay.addListener((obs, oldDay, newDay) -> {

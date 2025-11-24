@@ -112,16 +112,8 @@ public class TrackingService {
                 .map(t -> MapperUtil.mapToScheduleCardDto(t)).collect(Collectors.toList());
     }
 
-    /**
-     * Lấy danh sách Tracking có lịch chiếu, sử dụng phương thức tối ưu
-     * đã thêm vào TrackingRepository.
-     * @return Danh sách DTO lịch chiếu.
-     */
-    public List<TrackingScheduleCardDto> getScheduledTrackingCardDtos() {
-        return trackingRepository.getScheduledTrackings().stream()
-                // Sửa: .map(MapperUtil::mapToScheduleCardDto) -> .map(t -> MapperUtil.mapToScheduleCardDto(t))
-                .map(t -> MapperUtil.mapToScheduleCardDto(t))
-                // Sửa: .toList() -> .collect(Collectors.toList())
-                .collect(Collectors.toList());
-    }
+   //update newest animes
+
+
+
 }
